@@ -1,0 +1,72 @@
+\documentclass[$if(fontsize)$$fontsize$, $endif$$if(twocolumn)$twocolumn, $endif$]{jsarticle}
+\usepackage[hypertex]{hyperref}
+$if(listing)$
+\usepackage[dvipdfmx]{color}
+\usepackage{listings,jlisting}
+$endif$
+\usepackage{amsmath}
+\usepackage{ascmac}
+$if(geometry)$
+\usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
+$endif$
+%\usepackage[height=24cm,width=16cm]{geometry}
+\usepackage{fancyhdr}
+
+\renewcommand{\labelenumi}{\arabic{enumi})}
+\renewcommand{\labelenumii}{\alph{enumii})}
+
+\providecommand{\tightlist}{%
+   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\begin{document}
+
+$if(listing)$
+\renewcommand{\lstlistingname}{リスト}
+\lstset{language = c,
+numbers = left,
+numberstyle = {\footnotesize \emph},
+numbersep = 10pt,
+breaklines = true,
+breakindent = 40pt,
+frame = tlRB,
+frameround = ffft,
+framesep = 3pt,
+rulesep = 1pt,
+rulecolor = {\color{black}},
+rulesepcolor = {\color{black}},
+flexiblecolumns = false,
+keepspaces = true,
+basicstyle = \footnotesize,
+identifierstyle = \footnotesize,
+%commentstyle = \fontfamily{ptm}\selectfont\footnotesize,
+commentstyle = \selectfont\footnotesize,
+stringstyle = \scshape\footnotesize,
+tabsize = 4,
+% lineskip = 0.1ex
+}
+$endif$
+
+$if(twocolumn)$\twocolumn[$endif$
+\pagestyle{empty}
+\rule{\linewidth}{0.3pt}
+\begin{center}
+  \textbf{\LARGE $title$}
+\end{center}
+\begin{flushright}
+\today 版\\
+西井 淳
+\end{flushright}
+\rule{\linewidth}{0.3pt}
+{\small
+\begin{quote}
+\begin{screen}
+\tableofcontents
+\end{screen}\vspace{3mm}
+\end{quote}}
+$if(twocolumn)$]$endif$
+
+\newpage
+\pagestyle{fancy}
+$body$
+
+\end{document}

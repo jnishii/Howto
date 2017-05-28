@@ -1,0 +1,2771 @@
+% \newif\ifkanjifonts
+% \kanjifontsfalse
+% %\kanjifontstrue
+
+\documentclass{jreport}
+
+%\usepackage[sysfonts]{kanjifonts}
+%\usepackage[]{kanjifonts}
+\usepackage{amsmath}
+\usepackage{ascmac}
+\usepackage[height=24cm,width=16cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage[hypertex]{hyperref}
+\usepackage{alltt}
+\usepackage{makeidx}
+\usepackage{myindex}
+\makeindex
+
+\begin{document}
+
+\pagestyle{empty}
+\noindent
+\rule{\linewidth}{1pt}
+\begin{center}
+% \ifkanjifonts
+%  {\Huge\lxpopfamily ＵＮＩＸ／ＬＩＮＵＸの基本操作}
+% \else
+  {\Huge\gtfamily ＵＮＩＸ／ＬＩＮＵＸの基本操作}
+% \fi
+\end{center}
+\begin{flushright}
+\today 版\\
+西井 淳
+\end{flushright}
+\rule{\linewidth}{1pt} 
+
+\newpage
+\pagenumbering{roman}
+\setcounter{page}{1}
+\tableofcontents
+
+\newpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\pagestyle{fancy}
+
+\chapter*{はじめに}
+
+この原稿では、UNIX/Linuxの基本的な操作方法をごく簡単に説明してい
+ます。
+ただし，Vine Linux 6.2に準拠して書いてますので、それ以外のUNIX/Linux環
+境では若干異なる場合もあります。
+例えば，UNIXコマンドは Mac OS X でもほぼ共通に使えますが、コマンドオプショ
+ンが若干違う場合もあります。
+
+また、文章はいろいろな原稿のつぎはぎで作っているので，文体が不揃いです
+が御容赦を。
+
+
+% \textbf{研究室のホームページ}
+% \verb|http://bcl.sci.yamaguchi-u.ac.jp/|の
+% \textbf{''計算機関連のリンク集/UNIX関連の情報''}にあるリンクからもUNIXの基
+% 礎や、emacsなどのエディタの使い方を知ることができます。
+% \textbf{``計算機の使い方''}にもいくつか計算機を使う上でのヒントがあります。
+% その他、書籍等もあたって、UNIXやエディタの操作方法はよく慣れてください。
+
+\section*{キー表示について}
+
+本稿では、キーの表示は以下のように行っている。
+\begin{quote}
+  \verb|C-{xf}|は、Ctrlキーを押しながら x と f を順に押す
+\end{quote}
+ことを示し、
+\begin{quote}
+  \verb|C-x k| は、Ctrlキーを押しながら x をまず押し、次にCtrlキーを離  
+  して k を押す
+\end{quote}
+ことを示します。また、
+\begin{quote}
+  \verb|M-c| は、\bfindex{Meta キー}(PC用キーボードでは通常 Alt, Mac用
+  キーボードでは Command キー)を押しながら c を押す
+\end{quote}
+ことを示す。
+
+\section*{このドキュメントの著作権について}
+
+\begin{enumerate}
+\item 本稿の著作権は西井淳\url{nishii@sci.yamaguchi-u.ac.jp}が有します。
+\item 非商用目的での複製は許可しますが、修正を加えた場合は必ず修正点および加筆者の
+氏名・連絡先、修正した日付を明記してください。また本著作権表示の削除は行っ
+てはいけません。
+\item 本稿に含まれている間違い等によりなんらかの被害を被ったとしても著者は一切
+責任を負いません。
+\end{enumerate}
+間違い等の連絡や加筆修正要望等の連絡は大歓迎です。
+
+\chapter{コンソールとX Window System}
+
+UNIX では、\bfindex[こんそーるがめん]{コンソール画面}と一般に言われる、基本的に文字しか
+表示できない画面と、\nmindex{X Window System} というグラフィカルな画面がある。
+Linuxを起動すると通常自動でX Window Systemが起動してログインウィンドウ
+が表示されるが、後述するようにコンソール画面での作業も可能である。
+
+% コンソール上では、基本的に日本語は表示できない(文字化けしてしまう)。表示
+% の必要があるときには、kon を起動すると日本語を表示できるようになる。
+% \begin{screen}
+% \begin{verbatim}
+% $ kon
+% \end{verbatim}
+% \end{screen}
+% kon の 終了は
+% \begin{screen}
+% \begin{verbatim}
+% $ exit
+% \end{verbatim}
+% \end{screen}
+% である。
+
+\section{ウィンドウマネージャ}
+
+X Window 上では、複数のウィンドウの管理をしたり、さまざまなデスクトップ
+環境を提供するシステムとして、\bfindex{ウィンドウマネージャ}と呼ばれる
+システムが起動される。 
+Vine Linux 6.xの標準ウィンドウマネージャは \bfindex{GNOME} (上部に
+メニュー)であるが、
+他にもいろいろあり、高機能な\bfindex{KDE}も有名である。
+% それぞれ
+% \begin{verbatim}
+%   # apt-get install WindowMaker
+% \end{verbatim}
+% および
+KDEは
+\begin{verbatim}
+  # apt-get install task-kde
+\end{verbatim}
+でインストールでき、\textbf{ログイン時のメニューでどれを利用するか選択}できる。
+(\verb|apt-get|については\ref{sec:apt}参照)
+
+\section{コンソールの仮想画面への移動}
+
+作業はほとんどの場合 X Window 上で行なったほうが便利であるが、
+X Window上で障害がおきたときにはコンソール画面にログインして対応をする。
+
+X Window を利用しているときにコンソールに移るキーコマンドは
+\verb|{CM}-F1| (コントロールキーとメタキーを同時に押しながら F1 を押す)
+である。
+X Window に戻るには\verb|{CM}-F7|とする。
+
+Linux のコンソールでは、6画面の\bfindex[かそうがめん]{仮想画面}を使える。
+コンソール上で\verb|M-F1|, \verb|M-F2|,...,\verb|M-F6|で、画面の切替え
+をできる。
+ある画面がキーを受け付けなくなったときには、別の仮想画面に移って
+救出作業をすればよい。
+X-Window上から各コンソール画面へうつるためのキーコマンドは
+\verb|{CM}-F2|,...\verb|{CM}-F6| である。
+
+
+\section{ウィンドウマネージャ上の仮想画面}
+
+ウィンドウマネージャの多くも
+\bfindex[かそうがめん]{仮想画面}をサポートしている。
+% WindowMakerの場合は \verb|M-F1|, \verb|M-F2|,.. で、
+KDEの場合は \verb|C-F1|, \verb|C-F2|,.. で他の仮想画面にうつれる。
+% WindowMaker や GNOME では、panel を起動していれば、panel 上に仮想画面の
+% 様子が表示され, マウスクリックで移動できる。
+
+
+\section{コピー \& ペースト}
+X Window 上のウィンドウで表示されている文字は、ほとんどの場合マウスを用
+いて\bfindex{コピー} \& \bfindex{ペースト}を行える。マウスの左ボタンを
+押しながらコピーしたい領域を選択し、コピー先で\textbf{真中ボタン}を押せば良い。
+コンソール(ターミナル)等に表示されている文字列をコピーしたいときには、
+該当文字列のところで左ダブルクリックすれば、ワード単位で選択される。
+さらにもう一度クリックすれば行が選択される。
+% 左クリックで始点を、右クリックで終点を指定する方法もある。
+% CtrlとAltを押しながら左クリックをすれば矩形領域の選択もできる。
+
+\chapter{UNIXコマンドの基礎}
+
+\section{使用上の若干の注意}
+
+% \begin{itemize}
+% \item
+ コンソールやターミナル上で、\verb|C-s|をタイプすると画面表示が固ま
+ってキー入力ができなくなることがある。
+このときには \verb|C-q|をタイプすれば再びキー入力を受けつけるようになる。
+(\verb|C-s|は、本来、高速な画面表示を一時停止するために用意されている
+キー操作ですが，現在は画面表示が高速になりすぎたため実用的でなくなって
+しまったキー操作になっています。この一時停止機能は無効になってるターミ
+ナルもあります)
+% \item プログラムが異常終了したときなどに、\verb|core|というファイルが出
+%   来ることがある。
+%   \textbf{このファイルは通常不要なので、見付けたら削除}してください。
+% \end{itemize}
+
+\section{ファイル名の補間}
+
+ファイル名やコマンド名を入力する時には、全部タイプしなくても、
+最初の数文字をいれてTabキーを押せば、適宜補間される。
+例えば、以下のように ディレクトリ\verb|program|などがあるとする。
+\begin{screen}
+\begin{verbatim}
+$ ls -F
+program/ c/ tex/
+\end{verbatim}
+\end{screen}
+このとき、
+\begin{screen}
+\begin{verbatim}
+$ cd p[ここでTabを押す]
+\end{verbatim}
+\end{screen}
+とすれば、pに続いて文字列''program''が補間される。
+
+また、コマンドを実行するときにも同様に最初の数文字を入力してTabを押せば
+補間される。候補が複数ある場合には、その候補一覧が表示される。
+
+\section{コマンドの起動・中断}
+
+コマンドを起動するには、コマンド名をコンソール上やkterm上で入力する。
+UNIXでは同時に複数のプログラムを起動することができる。
+コマンドの実行を\bfindex[ばっくぐらうんどしょり]{バックグラウンド処理}で行う(kterm などを占有
+しないようにする)には、コマンドの後ろに \& をつけて実行する
+\begin{screen}
+\begin{verbatim}
+$ ./command &
+\end{verbatim}
+\end{screen}
+emacs 等を起動するときには、これによってバックグラウンド処理にするとよい。
+もし、\& をつけ忘れて立ち上げたときには、コマンドの実行中に
+\textbf{C-zでコマンド中断後、bg とタイプ}\index{bg}すれば、
+バックグラウンド処理に移行する。
+また、\verb|C-z|で中断したりバックグラウンドで走らせている
+ジョブを、ふたたびコンソール上で走らせるには、\textbf{fgとタイプ}
+\index{fg}すればよい。
+なお、bg は backgroud, fg は foreground の略である。
+
+現在バックグラウンドで走っているジョブは\vbindex{jobs}コマンド
+で確認できる。
+\begin{screen}
+\begin{verbatim}
+$ emacs &
+$ gcalctool &
+$ jobs
+[1]- Running    emacs &
+[2]+ Running    gcalctool &
+\end{verbatim}
+\end{screen}
+このように複数のジョブがバックグラウンドで動いているときには、
+\bfindex[じょぶばんごう]{ジョブ番号}
+が順につけられる。\verb|fg|によりフォアグラウンドに切替えるジョブを指定
+するには、このジョブ番号に\verb|%|をつけて指定する。
+\begin{screen}
+\begin{verbatim}
+$ fg %2
+xcalc
+\end{verbatim}
+\end{screen}
+ジョブ番号を指定しなかった時には、ジョブ番号に'+'がついてるジョブがフォ
+アグラウンドに移される。
+
+暴走してしまった処理中のコマンドを\bfindex[きょうせいしゅうりょう]{強
+  制終了}するには、\vbindex{C-c}を用いる。
+他に強制終了を行う方法はいくつかある。\ref{sec:process}節も参照すること。
+
+\section{コマンド履歴について}
+
+\index{こまんどりれき@コマンド履歴}
+実行したコマンドの履歴はしばらく記憶されてるので、C-p や C-n で前に
+実行したコマンドを探して再実行を簡単にできる。これまでに実行した
+コマンドの一覧を見るには\vbindex{history}コマンドを実行する。
+\begin{screen}
+\begin{verbatim}
+  $ history
+\end{verbatim}
+\end{screen}
+\index{こまんどけんさく@コマンド検索}
+これまで実行したコマンドを検索したいときには
+C-r (前方検索) C-s (後方検索)を使うことが出来る。
+
+\section{UNIXの基本コマンド(のごく一部)}
+
+UNIX上で頻繁に用いるコマンドの一部を以下に示す。
+使い方の詳細は man コマンド等で調べること。
+
+\subsection{基本操作}
+
+\index{ls}
+\index{rm}
+\index{cp}
+\index{mv}
+\begin{quote}
+\begin{tabular}[t]{ll}\hline
+コマンド & 意味 \\ \hline
+ls [オプション]& 現在のディレクトリのファイル一覧を表示する \\
+\qquad -l & ファイルの属性等詳しい情報も表示\\
+\qquad -a & '\verb|.|'から始まる隠しファイルも表示\\
+\qquad -R & サブディレクトリにあるファイルも再帰的に表示\\
+rm [オプション] ＜ファイル名＞ & ファイル削除 \\
+\qquad -r & 指定ディレクトリと、その下にあるファイル全てを再帰的に削除\\
+\small{cp ＜ソース＞ ＜コピー先＞} & 
+ファイル・ディレクトリのコピー\\
+\small{mv ＜ソース＞ ＜移動先＞} & 
+ファイル・ディレクトリの移動(名前変更)\\
+\hline
+\end{tabular}
+\end{quote}
+
+%異なるパーティション間でのディレクトリのコピーは以下を用いる。
+%\begin{screen}
+%\begin{verbatim}
+%cd <ディレクトリ名>; tar cf - $dir | (cd <コピー先> && tar xfBp -)
+%\end{verbatim}
+%\end{screen}
+
+\subsection{ディレクトリ関連}
+
+\index{cd}
+\index{mkdir}
+\index{rmdir}
+\index{pwd}
+\begin{quote}
+\begin{tabular}[t]{ll}\hline
+コマンド & 意味 \\ \hline
+cd ＜directory 名＞ & ディレクトリ移動(上に行くときは cd ..) \\
+cd - & 一つ前にいたディレクトリに移動 \\
+mkdir ＜directory 名＞ & ディレクトリをつくる \\
+rmdir ＜directory 名＞ & ディレクトリを消す \\
+pwd & 現在いるディレクトリ名を表示\\
+\hline
+\end{tabular}
+\end{quote}
+
+\subsection{ファイル閲覧・ファイルの情報取得}
+
+\index{cat}
+\index{less}
+\index{lv}
+\index{tail}
+\index{wc}
+\index{touch}
+\index{grep}
+\index{sort}
+\index{diff}
+\begin{quote}
+\begin{tabular}[t]{lp{9cm}}\hline
+コマンド & 意味 \\ \hline
+\verb|cat <ファイル名1> <ファイル名2> ...| & ファイルをつなげて標準出力に表示 \\
+\verb|less <ファイル名>| & ファイルの中身を表示 \\
+& ('f' or 'Space':次ページ, 'b':前ページ, 'q':終了, 'h':ヘルプ)\\
+\verb|lv <ファイル名>| & less を様々な言語コードに対応したもの\\
+\verb|tail [-<行数>]<ファイル名>| & ファイルの下から10行を表示\\
+\verb|   -20| & 下から20行を表示('-'に続いて行数を指定できる)\\
+\verb|wc <ファイル名>| & ファイルの文字数、ワード数、行数 を表示 \\
+\verb|touch <ファイル名>| & ファイルのタイムスタンプを更新する。もし指定
+した名前のファイルがなければ、大きさ0のファイルをつくる。\\
+\verb|grep [-r] <キーワード> <ファイル名>| & 指定ファイルから、キーワードを
+含む行を検索する。\\
+\qquad\verb|-r| & サブディレクトリ以下のファイルも再帰的に検索する。\\
+\verb|sort <ファイル名>| & ファイルを行単位でソート(アルファベット順)した結果を出力する。\\
+\verb|diff <ファイル1> <ファイル2>| & ファイル1とファイル2の違いを表示する\\
+\hline
+\end{tabular}
+\end{quote}
+
+%\subsection{ファイルのパーミション}
+
+%ファイルの機密保守等のためアクセスの制限を行うことができる。
+
+\subsection{プロセス管理(ps, top, kill, killall, xkill)\label{sec:process}}
+
+\index{ps}
+UNIX 上では同時に様々なプログラム(ジョブ)が走っている。
+現在走っている\bfindex[じょぶいちらん]{ジョブ一覧}を知りたいときには、
+\begin{screen}
+\begin{verbatim}
+$ ps auxw
+\end{verbatim}
+\end{screen}
+でわかる。自分が走らせてるジョブだけ知りたいときには単に\verb|ps|
+でも良い。
+(\verb|ps| コマンドのオプションの意味は、\verb|jman ps|で調べること。)
+
+また、コマンド\vbindex{top}を使うと、CPU使用率やメモリ使用率でソートさ
+れた結果が表示される。(\verb|top|コマンドの終了は'q', 使い方が分からな
+いときには'h'を押す。)
+
+この、\verb|ps| や \verb|top| の出力を見ると、
+\bfindex{プロセスID}(\bfindex{PID})という項目がある。
+このように各ジョブにはそれぞれ識別番号がついている。あるジョブが暴走して
+止まらなくなった時には、そのジョブのPIDを調べて、
+以下を実行すれば、そのジョブの
+\bfindex[きょうせいしゅうりょう]{強制終了}をすることができる。
+\index{kill}
+\begin{screen}
+\begin{verbatim}
+$ kill <PID>
+\end{verbatim}
+\end{screen}
+これでも停止しないときには、オプション\verb|-9|をつける。
+\begin{screen}
+\begin{verbatim}
+$ kill -9 <PID>
+\end{verbatim}
+\end{screen}
+
+ジョブの停止は \vbindex{top} 画面上からも出来る. PIDを確認したら 'k'
+をタイプし、続いてPIDを入力すればよい。
+
+また、コマンド名を指定して\verb|kill|を行うコマンド\vbindex{killall}も
+ある。例えば\verb|firefox|という名前のプロセスを全て終了させたい時
+には次のようにする。
+\begin{screen}
+\begin{verbatim}
+$ killall firefox
+\end{verbatim}
+\end{screen}
+ただし、同じ名前のコマンドがいくつか起動しているときうっかり
+\verb|killall|を使うと、killしたくないものまで消えてしまうので要注意。
+
+X-windows上で表示されているあるウィンドウを実行しているプロセスを殺す
+方法には、\vbindex{xkill}を実行して、対象のウィンドウをクリックする方
+法もある。
+
+
+\subsection{ファイル圧縮(gzip, bzip2)}
+
+ハードディスクやフロッピー等の限られた容量内に、多くのファイルを置くため
+には、あまり使わないファイルは圧縮しておくとよい。
+UNIXでよく使われる圧縮ツールには gzip や bzip2 がある。
+圧縮率の高さでは bzip2 が定評があるが、gzip に比べて圧縮に時間がかかるの
+が欠点である。
+
+\index{gzip}
+\index{gunzip}
+\index{bzip2}
+\index{bunzip2}
+\begin{quote}
+\begin{tabular}[t]{ll}\hline
+コマンド & 意味 \\ \hline
+gzip \verb|<ファイル名>| & 指定ファイルを圧縮する。(\verb|<ファイル名>.gz| というファイルになる)\\
+gunzip \verb|<ファイル名>| & 圧縮されているファイル(*.gz)をもとに戻す。\\
+bzip2 \verb|<ファイル名>| & 指定ファイルを圧縮する。(\verb|<ファイル名>.bz2| というファイルになる)\\
+bunzip2 \verb|<ファイル名>| & 圧縮されているファイル(*.bz2)をもとに戻す。\\
+\hline
+\end{tabular}
+\end{quote}
+
+圧縮されていても、ドキュメントファイルは less コマンドで中を見ることがで
+きる。
+
+個々のファイルではなく、ディレクトリごとgzipで圧縮するには以下のようにする。
+\index{tar}
+\begin{screen}
+\begin{verbatim}
+$ tar czvf <ディレクトリ名>.tar.gz <ディレクトリ名>
+\end{verbatim}
+\end{screen}
+これにより、指定ディレクトリを圧縮した、\verb|<ディレクトリ名>.tar.gz| という一つの圧縮
+ファイルができる。
+
+bzip2 を用いる場合には、
+\begin{screen}
+\begin{verbatim}
+$ tar czvf <ディレクトリ名>.tar.bz2 <ディレクトリ名>
+\end{verbatim}
+\end{screen}
+と、出力ファイル名の拡張子をbz2するだけで良い。
+
+もとに戻すには、以下を実行する。
+\begin{screen}
+\begin{verbatim}
+$ tar xzvf <tar.gz ファイル or tar.bz2 ファイル>
+\end{verbatim}
+\end{screen}
+また、もとに戻さず単にtar.gzファイルの中にどのようなファイルが含まれてい
+るか知りたいときには、
+\begin{screen}
+\begin{verbatim}
+$ tar tzvf <tar.gz ファイル or tar.bz2 ファイル>
+\end{verbatim}
+\end{screen}
+とする。
+
+なお、Vine Linux では、ディレクトリの圧縮のために、
+\vbindex{gzipdir}, \vbindex{bzip2dir}というコマンドも用意されている。
+\begin{screen}
+\begin{verbatim}
+$ gzipdir <ディレクトリ名>
+$ bzip2dir <ディレクトリ名>
+\end{verbatim}
+\end{screen}
+
+\subsection{ファイルを探す(which,locate)}
+あるコマンドを実行するとき、そのコマンドがどこのパスから呼び出されてい
+るかを知るには\vbindex{which}を使う。
+\begin{screen}
+\begin{verbatim}
+$ which less
+/usr/bin/less
+\end{verbatim}
+\end{screen}
+
+ある文字列を含むファイルがどこのパスにあるか、その一覧を知りたいときに
+は\vbindex{locate}を使う。
+\begin{screen}
+\begin{verbatim}
+$ locate stdio.h
+/usr/lib/bcc/include/stdio.h
+/usr/lib/perl5/5.8.6/i386-linux-thread-multi/CORE/nostdio.h
+/usr/include/bits/stdio.h
+/usr/include/isc/stdio.h
+/usr/include/glib-2.0/glib/gstdio.h
+/usr/include/stdio.h
+\end{verbatim}
+\end{screen}
+
+\subsection{文字コードの変換・判定(nkf)}
+日本語の文字コード(日本語の各文字を表す数値)にはJIS, SJIS, EUC,UTF-8など
+様々な企画がある。そのため，例えばMS Windowsで作成したファイルを
+MacやLinuxで見ようとすると文字化けする事がある。
+そのような時には\vbindex{nkf}コマンドである文書の文字コードが何かを判定し
+たり，文字コードの変換を行ったりすることができる。
+
+\begin{quote}
+\begin{tabular}[t]{ll}\hline
+コマンド & 意味 \\ \hline
+nkf [オプション] ファイル名 & 文字コードの判定, 変換\\
+\qquad -g & 文字コードの判定\\
+\qquad -j & JIS(ISO-2022-jp)コードに変換\\
+\qquad -s & SJISコードに変換\\
+\qquad -e & EUCコードに変換\\
+\qquad -w & UTF-8コードに変換\\
+\hline
+\end{tabular}
+\end{quote}
+\verb|コマンド|nkfには他にもいろいろな変換機能があるが，
+インストールされているバージョン等により若干異なるので\verb|man nkf|で
+一度確認しておくと便利。
+
+\subsection{ネットワーク関連のコマンド}
+
+\index{ping}
+\index{ssh}
+\index{scp}
+%\index{rsh}
+% \index{rcp}
+% \begin{quote}
+{\small
+\begin{tabular}[t]{lp{6cm}}\hline
+コマンド & 意味 \\ \hline
+\verb|ping <IPアドレス or ホスト名>| & 指定したホストとネットワークで接続され
+ているかを確認 \\
+\verb|ssh <IPアドレス or ホスト名>| & 指定したホストにログイン(通信は暗号化)
+\\
+\verb|ssh <ユーザ名>@<IPアドレス or ホスト名>| & 
+指定したホストに指定ユーザ名でログイン(通信は暗号化)
+\\
+\verb|scp <IPアドレス or ホスト名>:<ファイル1> <ファイル名2>|& 
+指定したホストのファイルを、指定ファイル名でコピー(通信は暗号化)
+\\
+% \verb|rsh <IPアドレス or ホスト名>| & 指定したホストにログイン
+% \\
+% \verb|rsh -l <ユーザ名> <IPアドレス or ホスト名>| & 
+% 指定したホストに指定ユーザ名でログイン
+% \\
+% \verb|rcp <IPアドレス or ホスト名>:<ファイル> <ファイル名>|& 
+% 指定したホストのファイルを、指定ファイル名でコピー
+% \\
+% \verb|finger @<IPアドレス or ホスト名>| & 指定したホストに誰がログインしてい
+% るかを確認\\
+% \verb|finger <ユーザ名>@<IPアドレス or ホスト名>| & 指定したホストに指定ユー
+% ザがログインしているかを確認\\
+% \verb|chfn| & finger で表示される自分に関する情報を変更する\\ 
+\hline
+\end{tabular}}
+% \end{quote}
+
+\subsubsection{ping}
+あるマシンがネットワークにつながっているかどうかを確認するには、
+\vbindex{ping} コマンドを用いる。
+\begin{screen}
+\begin{verbatim}
+$ ping venus.hogehoge.ac.jp
+PING venus.hogehoge.ac.jp (133.62.236.100) from 133.62.236.98 : 56(84) bytes of data.
+64 bytes from venus.hogehoge.ac.jp (133.62.236.100): icmp_seq=0 ttl=255 time=0.4 ms
+64 bytes from venus.hogehoge.ac.jp (133.62.236.100):
+icmp_seq=1 ttl=255 time=0.3 ms
+
+-- venus.hogehoge.ac.jp ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.3/0.3/0.4 ms
+\end{verbatim}
+\end{screen}
+上の例では、ネットワークを介して venus.hogehoge.ac.jp に到達可能であることがわかる。
+
+\subsubsection{ネットワーク接続(ssh,scp)}
+\label{sec:ssh}
+
+\textbf{ネットワークにつながっているマシンにログインして、さまざまな操
+  作を行うには}、暗号化通信を行える\vbindex{ssh}がよく使われる。
+%  や \vbindex{rsh} がよく使われる。
+% ただし、
+% \begin{quote}
+%   \verb|ssh| による通信は暗号化される
+% \end{quote}
+% が、
+% \begin{quote}
+% \verb|rsh| での通信はパスワードも含め暗号化されない
+% \end{quote}
+% ので、通信内容  
+% を盗聴されるとすぐにパスワードが漏洩してしまい危険である（インターネッ
+% ト上にあるフリーソフトで簡単に盗聴できてしまう）。
+% よって\textbf{通信にはできるかぎりsshを使う}こと。
+% ただし接続先が\verb|ssh|に対応していることが必要である。
+
+以下の例は \verb|ssh| で \verb|venus.hogehoge.ac.jp| に接続した例である。
+\begin{screen}
+\begin{verbatim}
+$ ssh jun@venus
+Host key not found from the list of known hosts.
+Are you sure you want to continue connecting (yes/no)? yes
+\end{verbatim}
+\end{screen}
+このように、あるホストに始めて\verb|ssh|で接続するときには、
+"そのホストには接続したことがないけど、本当に接続しますか?"
+と質問があるが、''yes''と答えると以下のようにログインを行える。
+\begin{screen}
+\begin{verbatim}
+Host 'venus' added to the list of known hosts.
+jun@venus's password: 
+Last login: Thu Aug 10 11:47:30 2000 from muse.hogehoge.ac.jp
+\end{verbatim}
+\end{screen}
+
+\textbf{リモートホストにあるファイルを自分が操作しているローカルホスト
+  上にコピーしたい時}には、\verb|scp| を用いる。
+\begin{screen}
+\begin{verbatim}
+$ scp venus:doc/memo .
+\end{verbatim}
+\end{screen}
+上の例は、\verb|venus| 上の \verb|~/doc/memo| を手元に
+コピーするためのコマンドである。指定ファイル名には、ワイルドカード(後述)も使える。
+
+%% \subsection{データ処理のコマンド}
+
+%% \begin{quote}
+%% \begin{tabular}[t]{lp{6cm}}\hline
+%% コマンド & 意味 \\ \hline
+%% cut      &  各行から選択した部分を表示する    \\ 
+%% \hline
+%% \end{tabular}
+%% \end{quote}
+%% 例えば以下のようなデータファイル(test.dat)があるとする
+
+% \subsubsection{finger}
+% あるホストに誰がログインしているか確認するには、finger コマンドを用い
+% る。
+% ただし，セキュリティ対策のためfingerはデフォルトの設定では利用できない
+% ようにしていることが多い。以下は使用可能な場合の例である。
+% \begin{screen}
+% \begin{verbatim}
+% $ finger @venus.hogehoge.ac.jp
+% Login     Name       Tty   Idle  Login Time   Office     Office Phone
+% chaplin   C. Chaplin  p1      1d  Aug  8 22:43 (:0.0)    001-01-234-5678
+% monroe                p1      27  Aug 10 10:54 (:0.0)
+% \end{verbatim}
+% \end{screen}
+% 上の例では venus.hogehoge.ac.jp に ログイン名 chaplin がAug 8 にログイン
+% しているが、 
+% 一日マシンを操作した形跡(Idle 1d)がないこと、
+% ログイン名 monroe は Aug 10 にログインして、27 分前まで操作していたこと
+% がわかる。
+% また、chaplin の名前は C. Chaplin, 電話は 001-01-234-5678 であることも
+% わかる。一方 monroe のほうは、名前も電話もわからない。
+
+% ログイン名を指定することによって、さらに詳しい情報を入手することもできま
+% す。
+% \begin{screen}
+% \begin{verbatim}
+% $ finger chaplin@venus.hogehoge.ac.jp
+% [venus.hogehoge.ac.jp]
+% Login: chaplin                          Name: C. Chaplin
+% Directory: /home/chaplin                Shell: /bin/bash2
+% Office: Chaplin organization
+% On since Tue Aug  8 22:43 (JST) on ttyp1 from :0.0
+%    1 day 13 hours idle
+% No mail.
+% Project:
+% zzz... zzz... zzz.......
+% Plan:
+% I'm sleeping day and night.
+% \end{verbatim}
+% \end{screen}
+
+% このように表示される自分の名前、Office 名、電話番号は
+% コマンドchfn を実行すると変更できる。
+% また、Plan や Project として表示されるメッセージは、それぞれ
+% ``~/.plan'', ``~/.project'' というファイルに書き込んでおけば
+% 表示される。
+
+\subsection{いろいろな情報を得る}
+
+\index{man}
+% \index{jman}
+\begin{quote}
+\begin{tabular}[t]{ll}\hline
+コマンド & 意味 \\ \hline
+man $<$コマンド$>$ & システムにインストールされてるコマンドの説明表示 \\
+% jman $<$コマンド$>$ & man と同じだが、可能な限り日本語で表示される  \\
+% & 例) \verb|$ jman ls|\\
+df & ディスク使用量を知る。 \\
+\hline
+\end{tabular}
+\end{quote}
+
+
+
+\section{ワイルドカードについて}
+'*' は\bfindex{ワイルドカード}と呼ばれ, 任意の文字列をさす。
+\begin{screen}
+\begin{verbatim}
+    $ ls a*
+\end{verbatim}
+\end{screen}
+とすれば、aではじまるファイル名の一覧表示.
+\begin{screen}
+\begin{verbatim}
+    $ ls *a*
+\end{verbatim}
+\end{screen}
+とすれば、aを含むファイル名の一覧表示.
+\begin{screen}
+\begin{verbatim}
+    $ cat *.c
+\end{verbatim}
+\end{screen}
+とすれば、すべてのcプログラムの中身表示
+
+'?' は任意の一文字をさす。
+\begin{screen}
+\begin{verbatim}
+    $ ls c?
+\end{verbatim}
+\end{screen}
+とすれば、ファイル名が``c$+$1文字''であるようなファイルが(あれば)表示される。
+
+
+\section{パイプについて}
+\verb-`|'-を\bfindex{パイプ}とよぶ。
+パイプの左側で実行したコマンドの標準出力が、パイプの右側のコマンドの標準入力になる。
+
+例えば以下のように、\verb|ls|のファイル一覧出力を\verb|lv|
+(\verb|less|でも良い)を使って見ることができる。
+たくさんファイルがあるとき便利である。
+\begin{screen}
+\begin{verbatim}
+$ ls -l | lv
+\end{verbatim}
+\end{screen}
+\verb|ls| の出力を \verb|sort| コマンドでソートして、さらに\verb|less|
+で見たいときには以下のようにする。
+(本当は \verb|ls| の出力はすでにソートされているので \verb|sort| コマ
+ンドを使う必要は無いのだが...)
+\begin{screen}
+\begin{verbatim}
+$ ls | sort | lv
+\end{verbatim}
+\end{screen}
+
+\section{リダイレクトについて}
+
+'$>$'を\bfindex{リダイレクト}よぶ。リダイレクトの左で実行したコマンド
+の標準出力が、リダイレクトの右に書いたファイルに出力される。
+
+\begin{list}{}{}
+\item [例1:] \verb|ls| の標準出力をファイル \verb|filelist| に書き込む。
+\begin{screen}
+\begin{verbatim}
+$ ls > filelist
+\end{verbatim}
+\end{screen}
+\item [例2:] ファイル\verb|data|をソートした結果を\verb|data2|に書き込む。
+\begin{screen}
+\begin{verbatim}
+$ sort data > data2
+\end{verbatim}
+\end{screen}
+\end{list}
+
+\section{シンボリックリンク}
+
+\verb|~/tex/|というディレクトリにいるときに、\verb|~/c/result|というデー
+タファイルを頻繁に参照する必要があるとしよう。このとき、
+\verb|~/c/result|を毎回参照するのは面倒なので、\verb|~/tex/|にコピーする
+のも一手だがこれだと、\verb|~/c/result|を修正したときに毎回コピーし直さ
+ないといけない。なによりもディスク消費も増える。このような時には以下の
+ように\bfindex{シンボリックリンク}を作る。
+\index{ln}
+\begin{screen}
+\begin{verbatim}
+$ cd ~/tex
+$ ln -s ../c/result result
+\end{verbatim}
+\end{screen}
+このあと、\verb|ls -l ~/tex|を実行してみよう。以下のようなファイルが出
+来ている。
+\begin{screen}
+\begin{verbatim}
+lrwxrwxrwx   1 jun      users          11 Mar 24 14:28 result -> ../c/result
+\end{verbatim}
+\end{screen}
+これで、\verb|~/tex/result|を参照すると、\verb|~/c/result|が参照される。
+このとき、
+\begin{quote}
+  \verb|~/tex/result|から\verb|~/c/result|に
+  \bfindex{シンボリックリンク}を張っている
+\end{quote}
+という。
+
+シンボリックリンクはディレクトリに対しても作れる。
+\begin{screen}
+\begin{verbatim}
+$ cd ~/tex
+$ ln -s ../c c
+\end{verbatim}
+\end{screen}
+とすれば、\verb|~/tex/c|を見ると\verb|~/c|が参照される。
+
+\section{システムの停止}
+
+UNIXを動かしているシステムを停止したいとき、いきなり電源を落してはいけな
+い。メニュー選択によって終了するか、以下のコマンドを用いる。
+\index{shutdown}
+\begin{quote}
+\begin{verbatim}
+$ /usr/sbin/shutdown -h now
+\end{verbatim}
+\end{quote}
+停止後すぐに再起動したい時(reboot)には、以下のように\verb|-r|オプション
+を使う。
+\begin{quote}
+\begin{verbatim}
+$ /usr/sbin/shutdown -r now
+\end{verbatim}
+\end{quote}
+
+\chapter{シェル(Bash)}
+
+UNIX では、入力した様々なコマンドの解釈・実行を行うためのユーザインタ
+フェースとして、\bfindex{シェル}が起動される。
+シェルには bash, tcsh, zsh ほか様々
+な種類があり、それぞれtabキーによるコマンドの補間機能や、プログラミン
+グ能力その他若干の違いがある。
+Linux では多くの場合bashが標準なので、以下では bash について説明する。
+
+\section{設定ファイル}
+
+\index{.bash_profile@.bash\_profile}
+\index{.bashrc}
+ログイン時に一度だけ実行する命令は、\verb|~/.bash_profile|に記述する。
+また、シェルの起動時に実行するコマンドは、通常\verb|~/.bashrc|に記述する。
+(\verb|~/.bashrc|の中身はログイン時やktermの起動時に毎回実行される)
+
+\section{エイリアス}
+長いコマンドを毎回うつのが面倒なとき、\bfindex{エイリアス}(別名)を定義
+しておくことができる。
+たとえば、以下の記述を\verb|~/.bashrc|に加えておくと、
+em とタイプすれば emacsが起動するようになる。
+\index{alias}
+\begin{screen}
+\begin{verbatim}
+alias em='emacs'
+\end{verbatim}
+\end{screen}
+\verb|~/.bashrc|に記述を加えたあとは、新たな設定を有効にするために、
+\begin{screen}
+\begin{verbatim}
+$ source ~/.bashrc
+\end{verbatim}
+\end{screen}
+を実行して\verb|~/.bashrc|を読み込むか、ログインをしなおすこと。
+
+\verb|~/.bashrc|を見ればわかるように、すでにいつかのエイリアスが定義さ
+れている。例えば、
+\begin{screen}
+\begin{verbatim}
+alias ls='ls -F --color=auto'
+\end{verbatim}
+\end{screen}
+という定義は ls を実行すると、\verb|ls -F --color=auto|が実行されるこ
+とを意味する。
+
+もし、上のような ls のエイリアスを無効にして実行したい時には、
+\verb|\|をコマンドにつけて、
+\begin{screen}
+\begin{verbatim}
+$ \ls
+\end{verbatim}
+\end{screen}
+を実行する。
+
+現在 ls にどのようにエイリアスが設定されているかは\vbindex{alias}コマ
+ンドで知ることができる。
+\begin{screen}
+\begin{verbatim}
+$ alias ls
+\end{verbatim}
+\end{screen}
+
+現在のエイリアスの設定を一時的に無効にするには\vbindex{unalias}を使う。
+\begin{screen}
+\begin{verbatim}
+$ unalias ls
+\end{verbatim}
+\end{screen}
+ls のエイリアスは継続的に無効にしたい時には、当然
+\verb|.bashrc|のエイリアス設定も消去する必要がある。
+
+あるコマンドがどのようなパスから、もしくはエイリアスから実行されている
+かを知りたいときにはwhichを使う。
+\begin{screen}
+\begin{verbatim}
+$ which rm
+alias rm='del'
+        /usr/bin/del
+$ unalias rm
+$ which rm
+/bin/rm
+\end{verbatim}
+\end{screen}
+上記の例では，rmはdelのエイリアスになっており，delで
+\verb|/usr/bin/del|が起動されていることがわかる。
+しかし、このエイリアスを消去すると\verb|/bin/rm|が起動される。
+
+\section{パス}
+
+なんらかのコマンドをタイプして実行しようとすると、
+環境変数 \vbindex{PATH}(\nmindex{パス}) で設定されているディレクトリか
+ら該当名のコマンドが捜索され、実行される。
+現在の\verb|PATH|設定は、
+\index{printenv}
+\begin{screen}
+\begin{verbatim}
+printenv PATH
+\end{verbatim}
+\end{screen}
+で参照できる。(単に\verb|printenv|とタイプすると、設定されてる全ての環
+境変数が表示される)
+
+例えば、\verb|~/bin| というディレクトリに入ってるコマンドも、PATH に追
+加したいときには以下を実行する。
+\begin{enumerate}
+\item \verb|~/.bashrc|に以下の行を追加
+  \begin{screen}
+\begin{verbatim}
+PATH=$PATH:$HOME/bin
+export PATH
+\end{verbatim}
+  \end{screen}
+  \vbindex{HOME}は各ユーザのホームディレクトリを示す変数である。
+  \verb|printenv HOME| を実行すると、\verb|$HOME| がなにかわかる。
+\item 設定(\verb|~/.bashrc|)を読み込む。\index{source}
+  \begin{screen}
+\begin{verbatim}
+$ source ~/.bashrc
+\end{verbatim}
+  \end{screen}
+\end{enumerate}
+
+\section{シェルスクリプト}
+
+\subsection{シェルスクリプトの基本}
+
+エイリアスは、長くても一行程度ですむようなコマンドの別名を定義するのに
+使う。さらに長い一連の命令をひとつのコマンドとするには、
+通常\bfindex{シェルスクリプト}と呼ばれるファイルを作成する。
+
+例えば、以下のような内容のファイルを\verb|ls.sh|という名前にして作って
+みよう。\index{echo}
+\begin{screen}
+\begin{verbatim}
+#!/bin/bash
+
+# まず現在のディレクトリを調べる。
+echo -n "現在のディレクトリは "
+pwd
+
+# どんなファイルがあるかを表示する。
+echo "以下のファイルが見付かりました。"
+ls
+\end{verbatim}
+\end{screen}
+次に、以下を実行する。
+\index{chmod}
+\begin{screen}
+\begin{verbatim}
+$ chmod +x ls.sh
+\end{verbatim}
+\end{screen}
+これは、ls.sh を実行可能なファイルにする命令である。(実行許可を取り消す
+には\verb|$ chmod -x ls.sh|とする。)
+ここで \verb|~/ls.sh|を実行すれば、現在のディレクトリ名と、中にある
+ファイル一覧が表示される(echo は 文等を表示する命令で、\verb|-n| 
+は表示後に改行しないためのオプション)。
+このように、実行したい命令をずらずらと書いたファイルをつくり、
+ファイルの先頭に\verb|#!/bin/bash|という行をいれれば、
+記述した命令を順次実行できるシェルスクリプトになる。
+
+また、各行で記号\verb|#|があるとき、
+それ以降の文字は\bfindex[こめんとぶん]{コメント文}とみなされて無視される。
+
+\subsection{シェルスクリプトの引数}
+
+\index{\$0}
+\index{\$1}
+\index{\$\#}
+シェルスクリプトの各\nmindex[ひきすう]{引数}は\verb|$0,$1,...|で参照できる。
+引数の数は\verb|$#|で参照できる。
+\index{\$@}
+\begin{screen}
+\begin{verbatim}
+#!/bin/bash
+
+echo "これが第0引数" $0
+echo "これが第1引数" $1
+echo "これが全ての引数" $@ 
+echo "これが引数の数" $# 
+\end{verbatim}
+\end{screen}
+
+\subsection{文字変数}
+
+Bash スクリプトで\bfindex[もじへんすう]{文字変数}を定義するには'$=$'を使って定義すれ
+ばよい。
+以下の例では、変数FNAMEに\verb|test.c|が、変数ARGに引数\verb|$1|が
+変数BINDIRに\verb|/usr/bin|が代入される。
+\begin{screen}
+\begin{verbatim}
+FNAME="test.c"
+ARG="$1"
+BINDIR="/usr/bin"
+\end{verbatim}
+\end{screen}
+ここで、\textbf{$=$の両側にはスペースが入らないことに注意!}
+変数の値を参照するには、変数名に\verb|$|をつける。
+また、変数名を\verb|{}|で囲むことが多い。(必ずしも囲む必要はないが、
+変数名の範囲を明確にできるのでトラブルがおきにくい)
+
+以下は、上のように定義した変数を参照する例である。
+\begin{screen}
+\begin{verbatim}
+echo "FNAMEは" ${FNAME} ", ARGは" ${ARG} "です"
+ls ${BINDIR}
+\end{verbatim}
+\end{screen}
+echo で表示する変数は、ちょっと手を抜いて""の中に入れてしまっても良い。
+\begin{screen}
+\begin{verbatim}
+echo "FNAMEは${FNAME}, ARGは${ARG}です"
+ls ${BINDIR}
+\end{verbatim}
+\end{screen}
+
+\subsection{変数の操作}
+
+Bash スクリプトでは変数の値を簡単に操作できる機能がある。
+以下ではその一部を紹介する。
+
+\index{\$\{\%\}}
+\index{\$\{\%\%\}}
+\index{\$\{\#\}}
+\index{\$\{\#\#\}}
+\begin{quote}
+\begin{tabular}[t]{lp{10cm}} \hline
+命令 & 意味 \\ \hline
+\verb|${VAL%word}| & 変数\verb|${VAL}|の値の後ろからword に合致する最小部分を削除した値\\
+\verb|${VAL%%word}| & 変数\verb|${VAL}|の値の後ろからword に合致する最長部分を削除した値\\
+\verb|${VAL#word}| & 変数\verb|${VAL}|の値の頭からword に合致する最小部分を削除した値\\
+\verb|${VAL##word}| & 変数\verb|${VAL}|の値の頭からword に合致する最長部分を削除した値\\
+\hline
+\end{tabular}
+\end{quote}
+
+以下はシェルスクリプトでの使用例である。
+\begin{screen}
+\begin{verbatim}
+#!/bin/sh
+DIR=/usr/local/bin
+echo ${DIR%/*}
+echo ${DIR%%/*}
+echo ${DIR#/*/}
+echo ${DIR##/*/}
+\end{verbatim}
+\end{screen}
+実行結果は以下の通り
+\begin{screen}
+\begin{verbatim}
+/usr/local
+
+local/bin
+bin
+\end{verbatim}
+\end{screen}
+
+
+\subsection{シェルスクリプトの終了}
+
+シェルスクリプトは 
+\vbindex{exit}が実行された時終了する。
+正常終了の時には \verb|exit 0|、異常終了の時には 
+\verb|exit 1| (0以外を指定)とする場合が多い。
+
+\subsection{if 文}
+
+Bashスクリプトでの\vbindex{if}構文は以下の通り。
+\begin{screen}
+\begin{verbatim}
+if [ 条件文 ] ; then
+...
+else
+...
+fi
+\end{verbatim}
+\end{screen}
+
+以下に条件文の一部を示す。
+\begin{quote}
+\begin{tabular}[t]{lp{10cm}}\hline
+条件文 & 意味 \\ \hline
+-d \verb|<文字>| & \verb|<文字>|の名前のディレクトリがある時真\\
+-f \verb|<文字>| & \verb|<文字>|の名前のファイルがある時真\\
+\verb|<文字1>| $=$ \verb|<文字2>| & \verb|<文字1>|と\verb|<文字2>|が等しい
+時真 (\textbf{'$=$'の両側にスペースがあることに注意})\\
+\verb|<文字1>| $!=$ \verb|<文字2>| & \verb|<文字1>|と\verb|<文字2>|が異
+なる時真\\
+\verb|! <条件文>| & \verb|<条件文>|が偽であるときに真 (NOT)\\
+\hline
+\end{tabular}
+\end{quote}
+
+\subsection{for 文}
+Bashスクリプトでの\vbindex{for}構文は以下の通り。
+\begin{screen}
+\begin{verbatim}
+for <変数> in <値1> <値2> ....; do
+...
+done
+\end{verbatim}
+\end{screen}
+\verb|<変数>|に \verb|<値1> <値2> ....|が順に代入され、do と done で囲ん
+だ部分が繰り返し実行される。
+
+以下はファイル a, b, c をそれぞれソートして a2, b2, c2 にするスクリプト
+である。
+\begin{screen}
+\begin{verbatim}
+for i in a b c; do
+   sort $i > ${i}2
+done
+\end{verbatim}
+\end{screen}
+\verb|in|以下には値を並べるかわりに、あるコマンドの出力を用いることも
+できる。
+以下は \verb|ls *.dat|で表示されるファイルについて、先の例と同様の処理を
+行うスクリプトである。(コマンドは ` で囲むこと)
+\begin{screen}
+\begin{verbatim}
+for i in `ls *.dat`; do
+   sort $i > ${i}2
+done
+\end{verbatim}
+\end{screen}
+以下は現在のディレクトリの下にあるディレクトリの一覧を表示するスクリプト
+である。
+\begin{screen}
+\begin{verbatim}
+for i in `ls`; do
+   if [ -d $i ]; then
+      echo $i
+   fi
+done
+\end{verbatim}
+\end{screen}
+
+\subsection{case文}
+
+ある変数の値に応じて様々な処理を分岐させる時には、\verb|if| 文を使うよりも
+\vbindex{case} 文を使う方が便利なことが多い。
+\begin{screen}
+\begin{verbatim}
+case <変数> in 
+        <値1>) 文1
+                ;;
+        <値2>) 文2
+                ;;
+        *) 文(default)
+                ;;
+esac
+\end{verbatim}
+\end{screen}
+\verb|変数|が\verb|値1|の時は\verb|文1|が、
+\verb|値2|の時は\verb|文2|が、いずれの値にも該当しないときには、
+文(default)が実行される。
+各文の終りには ;; を記述すること。;; が読み込まれると、case 文は終了する。
+
+以下は、引数で与えたファイルの拡張子に応じて解凍を行う例である。
+(``\verb+|+''は OR を表す。)
+\begin{screen}
+\begin{verbatim}
+case "$1" in 
+        *.tar.gz|*.tar.bz2) tar xzvf $1  ;;
+        *.gz) gunzip $1 ;;
+        *.bz2) bunzip2 $1 ;;
+esac
+\end{verbatim}
+\end{screen}
+
+\subsection{関数}
+
+シェルスクリプトでもC言語などのように関数を定義できる。
+関数の宣言は以下のフォーマットになる。
+\begin{screen}
+\begin{verbatim}
+  関数名(){
+     実行内容
+  }
+\end{verbatim}
+\end{screen}
+以下は簡単なシェルスクリプト例。
+引数の数が不適切なときに、関数Usage()を呼出し、実行コマンド名からディレトリ
+名を削除したものを引数として渡している。
+関数に渡された引数も\$0,\$1,...でアクセスできる。
+\begin{screen}
+\begin{verbatim}
+#!/bin/sh
+
+Usage(){
+        echo "Usage: $1 <filename>"
+        exit 1
+}
+if [ $# -ne 1 ]; then
+        Usage ${0##/}
+fi
+echo $1
+exit 0
+\end{verbatim}
+\end{screen}
+
+% \subsection{参考文献}
+
+% シェルスクリプトは大変強力なプログラミング言語である。詳細を知るには
+% 以下の書籍等で各自自習すること。
+% \begin{quote}
+%   川村正樹「BASH入門」秀和システム
+% \end{quote}
+
+\chapter{メールを読む}
+\section{メーラ}
+Linuxで使えるメーラとしては
+\vbindex{Thunderbird}(Firefoxの兄弟ソフト)が人気がある。
+MS Windows, Mac OS Xでも利用できるのでお薦め。
+
+\section{メールの転送について\label{sec:forward}}
+
+何カ所かにメールアドレスを持ってるとき，メールを一ヶ所にまとめて見れる
+ようにすると便利である。
+大抵のプロバイダではメールの転送設定を受け付けている。
+また，メールサーバがUNIX/Linux環境で管理されてる場合は以下のように設定すれば
+\bfindex[めーるのてんそう]{メールの転送}をできる。
+\begin{enumerate}
+% \item fetchmailconf で複数のメールサーバからメールを受け取るように設定す
+%   る (\ref{sec:fetch}節参照)。
+\item メールサーバのホームに \verb|~/.forward|\index{.forward}と
+  いうファイルをつくって、中に転送先を書いておく。
+\begin{verbatim}
+$cat ~/.forward
+hoge@bcl.sci.yamaguchi-u.ac.jp        # 転送先のメールアドレス
+\end{verbatim}
+上記のような\verb|./forward|を用意した場合，受け取ったメールはもれなく
+\verb|hoge@bcl.sci.yamaguchi-u.ac.jp|に転送される．
+\item メールサーバにもメールを残しておきたい
+  ときには、\verb|~/.forward|に、マシンA用のアカウント名も書いておく。
+\begin{verbatim}
+$cat ~/.forward
+userA                                 # マシンAのアカウント名
+hoge@bcl.sci.yamaguchi-u.ac.jp        # 転送先のメールアドレス
+\end{verbatim}
+
+\end{enumerate}
+
+
+% \section{メールの確認}
+
+% メールサーバが手元のローカルマシンの時には，
+% xpbiff を起動していれば、メールが来たら教えてくれます。
+% メールサーバがリモートサーバ上のときには，
+% xpbiff をメールサーバで起動します。
+% \begin{verbatim}
+% $ ssh -X <アカウント名>@<メールサーバ名> /usr/X11R6/bin/xpbiff &
+% \end{verbatim}
+
+\chapter{エディタ(emacs)}
+
+プログラム等をつくるとき、UNIX上ではエディタとして \vbindex{emacs}
+等を使うことが多い。
+\verb|emacs|と同様の操作およびキー操作のエディタで軽いものに 
+\vbindex{ng}, \vbindex{jed}などもある。
+\verb|emacs| はコンソール上ではオプション\verb|-nw|をつけて起動する。
+X Window 上で立ち上げるときにはオプションは不要。
+
+ファイル操作等はメニューからも行うことができるが、できるだけキー操作を
+覚えると作業効率がよくなるので、できるだけキー操作を覚えることを勧める。
+\verb|emacs|では日本語チュートリアルがある(メニューのhelpから呼べる)
+ので、これを利用してみるとよい。
+
+いろいろなキーを押してるうちに表示がおかしくなったら
+\begin{screen}
+\begin{verbatim}
+C-g
+\end{verbatim}
+\end{screen}
+を２回続けてタイプすると、もとの状態に(大抵)戻る。
+
+\section{注意事項}
+
+\textbf{emacs を同時に複数起動してはいけない。}
+編集用に複数のウィンドウが必要な時には、一つの emacs から新しいウィンド
+ウを開けられる。
+(\ref{sec:emacs.screen}参照)。
+このほうが、操作もいろいろ便利で、メモリ使用量もはるかに少なくてすむ。
+
+\section{基本操作}
+
+\begin{quote}
+\begin{tabular}[t]{ll}\hline
+キー操作 & 意味 \\ \hline
+C-\{xf\} & ファイルを開く \\
+C-\{xs\} & ファイルを保存 \\
+C-\{xc\} & 終了 \\
+C-\{g\} & エラーがあったときとりあえず何度か押してみる \\
+C-x i & ファイルをマウスカーソルの位置に挿入 \\
+C-x k & 現在編集中の文書を破棄する \\
+C-x u & アンドゥ(実行したコマンドの取消)\\
+C-s & 文字検索 (カーソル行以降で検索)\\
+C-r & 文字検索 (カーソル行より前で検索)\\
+M-x query-replace & 文字置換(確認あり) \\
+M-x replacestring & 文字置換(確認なし)\\
+\hline
+\end{tabular}
+\end{quote}
+
+\section{移動}
+
+\begin{quote}
+\begin{tabular}[t]{ll}\hline
+キー操作 & 意味 \\ \hline
+C-v & 次の画面に進む\\
+M-v & 前の画面に戻る \\
+C-b & 一文字左へ \\
+C-f & 一文字右へ \\
+C-p & 一文字上へ \\
+C-n & 一文字下へ \\
+C-d & カーソル位置の文字を削除 \\
+C-k & カーソル位置から行末までの文字を削除 \\
+C-e & 行の一番右へ\\
+C-a & 行の一番左へ\\
+M-f & 一単語右へ\\
+M-b & 一単語左へ\\
+M-g \verb|<行番号>| & 指定行へ移動 (emacs)\\
+M-x goto-line& 指定行へ移動 \\
+\hline
+\end{tabular}
+\end{quote}
+
+\section{画面操作\label{sec:emacs.screen}}
+
+\begin{quote}
+\begin{tabular}[t]{ll}\hline
+キー操作 & 意味 \\ \hline
+C-x 2 & 画面を上下に分割 \\
+C-x o & 分割した上下の画面間を移動 \\
+C-x 0 & 分割した画面のうちカーソルのあるほうを閉じる \\
+C-x 1 & 分割した画面のうちカーソルの無いほうを閉じる \\
+C-x 5 2 & もう一つウィンドウを開く \\
+C-x 5 o & ウィンドウ間で移動 \\
+C-x 5 0 & カーソルのあるウィンドウを閉じる \\
+C-x b & 読み込んである他のファイルを表示(名前を指定) \\
+\hline
+\end{tabular}
+\end{quote}
+
+\section{ファイル一覧窓での操作}
+
+C-\{xb\} で編集中のファイル一覧が表示される。
+この一覧表示をしてる窓に C-x o で移動すると、各ファイルについていろいな操
+作を行える。
+今回は、そのファイルの表示に関するコマンドのみ紹介する。
+
+\begin{quote}
+\begin{tabular}[t]{ll}\hline
+キー操作 & 意味 \\ \hline
+C-\{xb\} & 現在読み込んでるファイルの一覧表示\\
+1 & カーソル位置のファイルを現在のウィンドウいっぱいに表示する\\
+2& カーソル位置のファイルを現在の窓に表示する\\
+n & カーソルと次の行へ進める\\
+p & カーソルと前の行へ戻す\\
+\hline
+\end{tabular}
+\end{quote}
+
+\section{カット/コピー/ペースト}
+
+\begin{quote}
+\begin{tabular}[t]{ll}\hline
+キー操作 & 意味 \\ \hline
+C-space & 始点のマーク \\
+M-w & 始点から現在のカーソル位置までを記憶\\
+C-w & 始点から現在のカーソル位置までを削除して記憶\\
+C-y & 記憶内容をカーソル位置にペースト(出力) \\
+\hline
+\end{tabular}
+\end{quote}
+
+編集中のファイルの\textbf{一部分を別の場所にコピー}するには以下のように行う。
+
+\begin{quote}
+\begin{enumerate}
+\item コピーしたい部分の先頭にカーソルを移動する
+\item C-space をタイプ(これで先頭位置が記憶される)
+\item コピーしたい部分の終りにカーソルを移動する
+\item M-w を押す(これで先頭位置からこの終りの部分までが記憶される。
+  この部分を\bfindex{リージョン}(\nmindex{region}:領域)と呼ぶ)
+\item コピー先にカーソルを移動する
+\item C-y をタイプ。これでコピー完了。
+\end{enumerate}
+\end{quote}
+
+\textbf{一部分を削除}したい時には、上のコピーの手続きで、M-w のかわり
+に、C-w をタイプすれば、設定したリージョンが削除・記憶される。
+
+\textbf{一部分を移動}したい時には、上の削除を行った後、移動先へカーソ
+ルを持って行きコピーの場合と同様に C-y をタイプすれば、削除された領域
+がそこにペーストされる。
+
+\section{C/C++のプログラムを書く}
+
+emacs で拡張子が .c や .cc といったファイルを読み込むと、
+自動的に c/c++ プログラムの編集用モードに切り替わる。メニューには ``C''もし
+くは''C++''といったメニューができる。
+
+C-\{cc\} を押せばすぐにコンパイルを行うことができる。
+
+\begin{quote}
+\begin{tabular}[t]{ll}\hline
+キー操作 & 意味 \\ \hline
+C-\{cc\} & コンパイル実行 \\
+C-c c & リージョンをコメントする\\
+C-\{uc\} c & リージョンをアンコメントする\\
+\hline
+\end{tabular}
+\end{quote}
+
+\section{Emacsのカスタマイズ}
+emacsは, 設定ファイル\verb|.emacs|を編集することで，いろいろな機能を追
+加できる。例えば，以下を\verb|.emacs|に追加すると，一行が 80 字以上に
+なった時には自動改行できる。
+\begin{screen}
+\begin{verbatim}
+(setq fill-column 80)
+(setq text-mode-hook 'turn-on-auto-fill)
+(setq default-major-mode 'text-mode)
+\end{verbatim}
+\end{screen}
+
+google先生に「emacs カスタマイズ」でお伺いしてみると，便利な機能をいろ
+いろ発見できる。
+
+\section{\LaTeX 文書の作成(auctexモード)$^*$}
+
+\LaTeX は数式を含む文書作成に優れた文書整形システムである。
+研究室では、\verb|emacs|上に\nmindex[tex]{TeX} ファイルを読み込むと
+\verb|auctex|モードになり、\LaTeX 文書の作成が容易になるように設定して
+ある。
+(Vine Linux のデフォルトの設定では\vbindex{yatex}が起動する)
+
+
+\subsection{auctexの使いかた}
+
+\subsubsection{auctexの操作}
+このモードの時には、\verb|emacs| 上部に
+``LaTeX'', ``Headings'', ``Show'', ``Hide''というメニューが出て来るので、
+これをクリックすればいろいろな機能を見付けることができる。以下には代表の
+ものだけ紹介する。
+
+\subsection{TeX文書の処理}
+
+\begin{quote}
+\begin{tabular}[t]{ll}\hline
+キー操作 & 意味 \\ \hline
+C-\{cc\} & TeXファイルの処理実行 (LaTeX2e, View, Printなど指定)\\
+C-c~` & platex コマンド等の処理がエラーを出したとき、そのエラー箇所を表示\\
+C-\{cl\} & platex コマンド等の処理中、その処理の様子を表示\\
+\hline
+\end{tabular}
+\end{quote}
+
+\subsection{TeX文書の作成}
+
+\begin{quote}
+\begin{tabular}[t]{ll}\hline
+キー操作 & 意味 \\ \hline
+C-\{ce\} & LaTeX コマンド挿入 (\verb|\begin{},\end{}|などの挿入)\\
+C-\{uce\} & マウスカーソルの位置が囲まれているLaTeXコマンドの変更 \\
+M-Return & \verb|\item|挿入 \\
+C-c ; & リージョンをコメント \\
+C-c : & リージョンをアンコメント \\
+\hline
+\end{tabular}
+\end{quote}
+
+\subsection{TeX文書の表題表示}
+長い文章つくるときに、セクション見出しのみを表示したりできます。
+
+\begin{quote}
+\begin{tabular}[t]{ll}\hline
+キー操作 & 意味 \\ \hline
+C-c @ C-t & 折り畳む(セクション一覧)\\
+C-c @ C-c & 折り畳む(マウスポインタのあるセクションのみ)\\
+C-c @ C-a  & 広げる(全文表示)\\
+C-c @ C-e  & 広げる(マウスポインタのあるセクションのみ)\\
+\hline
+\end{tabular}
+\end{quote}
+
+\chapter{プリントアウト}
+
+\section{プリンタ管理CUPS\label{sec:cups}}
+
+Vine LinuxやMac OS Xではプリンタ管理システムとして
+\bfindex{CUPS}(Common UNIX Printing System)が使われている。
+以下にアクセスすると、プリンタの登録、プリントジョブのモニター等を行うことが
+できる。
+\begin{quote}
+\begin{verbatim}
+http://localhost:631/
+\end{verbatim}
+\end{quote}
+
+\section{プリントアウトの基本}
+
+テキストファイルやPSファイル(拡張子が\verb|ps|のファイル)を\nmindex{プ
+  リントアウト}するには、
+\vbindex{lpr} コマンドや\vbindex{mpage} コマンドを使う。
+\begin{screen}
+\begin{verbatim}
+$ lpr <ファイル名>
+\end{verbatim}
+\end{screen}
+または、 
+\begin{screen}
+\begin{verbatim}
+$ mpage -P -1 <ファイル名>
+\end{verbatim}
+\end{screen}
+
+
+テキストファイルやPSファイルの ２ページを紙１枚にまとめて印刷するには、
+\begin{screen}
+\begin{verbatim}
+$ mpage -P -2 <ファイル名>
+\end{verbatim}
+\end{screen}
+同様に -4, -8 というオプションもある。 mpage には他にも、いろいろ
+な機能があるので、man mpage で参照すること。
+\verb|mpage| のほかに \vbindex{a2ps} もよく使われる。
+
+\section{プリンタの切替え}
+
+複数のプリンタを利用している環境で、出力するプリンタを切替えたい場合に
+は、
+プリンタを指定する時には、オプションで{\ttfamily -P{$<$}プリンタ名{$>$}}と指定します。
+例えば、プリンタ名が epson の時には以下のようになる。
+\begin{screen}
+\begin{verbatim}
+                $ lpq -Pepson
+                $ lprm -Pepson <ジョブ番号>
+\end{verbatim}
+\end{screen}
+
+とします。mpage や lpr コマンドでも同様にしてプリンタを指定できる。
+
+
+
+\section{\TeX ファイルの印刷$^*$}
+
+\TeX を印刷するには\vbindex{dvips}コマンドで\vbindex{dvi} ファイルに変換
+してから\verb|lpr|コマンドを使って印刷します。
+\begin{screen}
+\begin{verbatim}
+$ dvips -f <ファイル名.dvi> | lpr
+\end{verbatim}
+\end{screen}
+\verb|-f|は出力を標準出力にするためのオプションです。
+上の例では出力をlprへパイプしています。
+
+dvi ファイルの 2ページ目から3ページ目を印刷する時には次のようにします。
+\begin{screen}
+\begin{verbatim}
+$ dvips -f -p 2 -l 3 &lt;ファイル名.dvi> | lpr
+\end{verbatim}
+\end{screen}
+
+つまり、\verb|-p|は最初のページの指定、\verb|-l|は最後のページの指定
+をするためのオプションです。
+
+以下のようにすれば、TeXファイルの２ページを紙１枚にまとめて印刷できま
+す。
+\begin{screen}
+\begin{verbatim}
+$ dvips -f <ファイル名.dvi> | mpage -P -2  
+\end{verbatim}
+\end{screen}
+
+\section{プリントアウトの中止}
+
+「あ、しまった、これは印刷するつもりじゃなかった！！！」という時には
+以下のようにします。
+\begin{enumerate}
+\item \vbindex{lpq} を実行すると、 現在印刷作業中の物件のジョブ番号 が表示される。 
+\item \vbindex{lprm} [ID番号] を実行する 
+\end{enumerate}
+
+プリンタを指定する時には、-P オプションを使って、
+\begin{screen}
+\begin{verbatim}
+$ lpq -Ppr2
+$ lprm -Ppr2 <ジョブ番号>
+\end{verbatim}
+\end{screen}
+とします。
+ここの例では、pr2 がプリンタ名である。
+\verb|lpq| というコマンドは印刷作業状況を知るにも便利です。
+
+\verb|lprm|を使うかわりに
+CUPS(\ref{sec:cups}節)にアクセスして「ジョブの停止」をクリックして印刷
+を止めることもでます。
+
+\verb|lprm|やCUPSで印刷中止が間にあわなかったときには、プリンターに走って
+以下を実行してください。
+\begin{enumerate}
+\item 紙をひっこぬく 
+\item プリンタの操作パネルで"オフライン"にする 
+\item プリンタを"リセット"する 
+\end{enumerate}
+
+
+\chapter{ソフトウェアのインストール方法(rpm/apt)}
+
+
+\section{rpm パッケージのインストールをしたい(rpm/apt コマンドの使いかた)}
+
+いろいろなアプリケーションが \vbindex{rpm} 形式と呼ばれる\nmindex{パッ
+  ケージ}形式で配布されており、
+インストール・アップグレード・削除を行える。
+\verb|rpm|や\verb|apt|の利用方法は以下に簡単に説明するが，
+詳細についてはVine Linuxオンラインマニュアル
+(\url{file:/usr/share/doc/Vine/index.html})
+を見るとよい。
+
+\verb|rpm|コマンドはダウンロードした個々の\verb|rpm|パッケージのインス
+トールや削除に、\vbindex{apt-get}コマンドはパッケージのダウンロードか
+らインストールまでをまとめて実行するのに使う。
+
+\section{rpm を利用したパッケージ管理}
+例えば，\verb|skype-0.93.0.3-fc2.i386.rpm|というパッケージを入手したとします。
+このファイル名のうちskypeはパッケージ名、0.93.0.3は
+バージョン番号(ソフトウェアのバージョン)、fc3がリリース番号(rpmパッケー
+ジのバージョン)を指します。
+\begin{itemize}
+\item {rpmパッケージに関する情報をみる}
+\begin{screen}
+\begin{verbatim}
+# rpm -qip skype-0.93.0.3-fc2.i386.rpm
+ame        : skype                      Relocations: (not relocatable)
+Version     : 0.93.0.3                        Vendor: (none)
+Release     : fc2                       Build Date: 2004?12?22? 00?25?23?
+Install Date: (not installed)           Build Host: localhost.localdomain
+Group       : Internet                  Source RPM: skype-0.93.0.3-fc2.src.rpm
+Size        : 5561226                   License: Commercial
+Signature   : (none)
+Summary     : Skype is free Internet telephony that just works
+Description :
+Skype offers free superior sound quality Internet telephony. In addition, it
+includes:
+...
+\end{verbatim}
+\end{screen}
+上記コマンドオプションのqはquery(問合せ), iはinformation(情報), pは
+package(パッケージ名)を意味する。
+\item rpmパッケージに含まれるファイルの一覧をみる
+\begin{screen}
+\begin{verbatim}
+# rpm -qlp skype-0.93.0.3-fc2.i386.rpm
+/usr/bin/skype
+/usr/share/applications/skype.desktop
+/usr/share/pixmaps/skype.png
+....
+\end{verbatim}
+\end{screen}
+上記コマンドオプションのlはlist(一覧)を意味する。
+\item {rpmパッケージのインストール}
+\begin{screen}
+\begin{verbatim}
+# rpm -ivh skype-0.93.0.3-fc2.i386.rpm
+\end{verbatim}
+上記コマンドオプションのiはinstall(インストール), vはverbose(言葉数の
+多い, (コマンド実行中に詳しい情報を表示)), hはhash(\# 印をインストー
+ル中に表示)を意味する。
+\end{screen}
+\item {インストールしたパッケージのファイル一覧をみる}
+\begin{screen}
+\begin{verbatim}
+# rpm -ql skype
+/usr/bin/skype
+/usr/share/applications/skype.desktop
+/usr/share/pixmaps/skype.png
+....
+\end{verbatim}
+\end{screen}
+\item {システムにインストールしてあるrpmパッケージの一覧を表示}
+\begin{screen}
+\begin{verbatim}
+# rpm -qa
+\end{verbatim}
+\end{screen}
+上記コマンドオプションのaはallを意味する。
+\item {インストールしてあるパッケージのバージョンをみる}
+\begin{screen}
+\begin{verbatim}
+# rpm -q skype
+skype-0.93.0.3-fc2
+\end{verbatim}
+\end{screen}
+\item {インストールしてあるパッケージの情報を得る}
+\begin{screen}
+\begin{verbatim}
+# rpm -qi skype
+ame        : skype                      Relocations: (not relocatable)
+Version     : 0.93.0.3                        Vendor: (none)
+Release     : fc2                       Build Date: 2004?12?22? 00?25?23?
+Install Date: (not installed)           Build Host: localhost.localdomain
+......
+\end{verbatim}
+\end{screen}
+\item {rpmパッケージのアップグレード}
+\begin{screen}
+\begin{verbatim}
+# rpm -Uvh skype-1.3.0.53-fc5.i586.rpm
+\end{verbatim}
+\end{screen}
+\item {インストールしてあるrpmパッケージの削除}
+\begin{screen}
+\begin{verbatim}
+# rpm -e skype
+\end{verbatim}
+\end{screen}
+上記コマンドオプションのeはerase(削除)を意味する。
+\item システム上にあるファイルがなんというパッケージのものかを知る
+\begin{screen}
+\begin{verbatim}
+$ rpm -qf /usr/bin/less
+less-382-0vl4
+\end{verbatim}
+\end{screen}
+上記コマンドオプションのfはfile(ファイル名)を意味する。
+\end{itemize}
+
+
+\section{apt を利用したパッケージのインストール・一斉更新\label{sec:apt}}
+
+\vbindex{apt} を利用すると、あるディレクトリやインターネット上の各サイ
+トにある rpm パッケージのダウンロードとインストール、アップグレードを
+簡単にできる。
+パッケージ依存性も同時にチェックして、必要なものは同時にインストールし
+てくれる。
+パッケージ入手先を変更したいときは\vbindex{/etc/apt/sources.list}に登録する。
+\begin{enumerate}
+\item まず必ず行うおまじない: 
+すでにインストールされているパッケージ情報と、\verb|sources.list| に登
+録されているサイトにある最新パッケージ情報を入手する。
+\index{apt-get}
+\begin{screen}
+\begin{verbatim}
+  # apt-get update 
+\end{verbatim}
+\end{screen}
+
+\item  特定のパッケージをインストールするとき
+\begin{screen}
+\begin{verbatim}
+  apt-get install package [package ...]
+\end{verbatim}
+\end{screen}
+
+これで、指定した package の入手・インストールが自動的にされる。
+
+\item  既にシステムにインストールされているパッケージを、最新版に更新したいとき
+\begin{screen}
+\begin{verbatim}
+  apt-get upgrade
+\end{verbatim}
+\end{screen}
+
+% 現在インストールされているパッケージを、最新版に自動更新します。
+% (もちろん最新版の捜索範囲は \verb|sources.list| に登録されているサイト
+% のみです。)
+このとき、同時に必要になる追加パッケージがあれば、いっしょにインストー
+ルしてくれる。
+ただし、更新によって、既にインストールされているパッケージが、
+同様の機能を持つ別のパッケージに置き換えられるものや、
+依存性の関係で削除されるパッケージものがある場合には、
+更新は行われない。
+
+\item 既にインストールされているパッケージを、パッケージの置き換えや削
+  除も含めて最新版に更新したいとき
+\begin{screen}
+\begin{verbatim}
+  apt-get dist-upgrade
+\end{verbatim}
+\end{screen}
+現在インストールされているパッケージを、最新のパッケージにする点は
+apt-get upgrade と同じだが、同じ機能をもつ別のパッケージへの差し
+替えや、依存性に問題の生じるパッケージの削除も行われる。
+便利だけど、パッケージの削除が行われるときには注意が必要。
+\end{enumerate}
+
+\subsection{apt を利用したパッケージの削除}
+
+\begin{screen}
+\begin{verbatim}
+  apt-get remove package [package ...]
+\end{verbatim}
+\end{screen}
+
+
+\subsection{apt を利用したパッケージの情報取得}
+
+\begin{enumerate}
+\item まず行うおまじない\index{apt-cache}
+\begin{screen}
+\begin{verbatim}
+  apt-cache gencaches
+\end{verbatim}
+\end{screen}
+このコマンドで、パッケージの最新情報を取得できる。
+\item パッケージの情報取得
+\begin{screen}
+\begin{verbatim}
+  apt-cache show package [package ...]
+\end{verbatim}
+\end{screen}
+このコマンドで、指定したパッケージのバージョン、機能、
+ライブラリやパッケージへの依存情報等が表示される。
+もっと詳しい情報を知りたいときには以下を実行する。
+\begin{screen}
+\begin{verbatim}
+  apt-cache showpkg package [package ...]
+\end{verbatim}
+\end{screen}
+\end{enumerate}
+
+
+\section{いろいろなパッケージを入手したい}
+
+VinePlus (Vine Linux のオプショナルパッケージ集)のミラーサイトを見ると、
+いろいろなパッケージがあり、収録物は日々更新されている。
+apt-get を使えばこれらのパッケージを簡単にインストールできる。
+
+
+% \chapter{いろいろなアプリケーション}
+
+% この章では代表的なアプリケーションと、そのインストール方法を紹介します。
+
+% \section{ブラウザ}
+% 定番ソフトとしてfirefoxがよく使われます。
+% 他にもopera, konqueror(KDE用)その他いろいろあります。
+% X Windowを必要とせず，コンソール上でブラウジングできるソフトとして，
+% w3m や lynx があり、これも便利です。
+
+% \section{マルチメディアファイルを見る!}
+% \subsection{pdf ファイルを見たい.}
+
+% \vbindex{pdf}ファイルは
+% \vbindex{evince}, \vbindex{gv}, \vbindex{xpdf},
+% \vbindex{Acrobat-reader}(コマンド名\vbindex{acroread}) で閲覧できます。
+% % gvが一番安定して閲覧・印刷できるようですが、
+% Acrobat社のAcrobat-readerでないと読めないファイルもあります。
+% Acrobat-readerは\url{http://www.adobe.com}からダウンロードして使うこ
+% とができます。
+% 研究室ではデフォルトでインストールされるように設定してあります。
+
+% \subsubsection{Acrobat-readerのインストール方法}
+% 残念ながら rpm パッケージでの配布はありませんが、以
+% 下の手順で rpm パッケージを作成できます。
+% (研究室内では、デフォルトでインストールされています)
+% \begin{enumerate}
+% \item Vine Linux の ftp サイト内の \verb|VinePlus/cm_setup| ディレクトリより以下のパッケージを入手する。
+%   \begin{screen}
+% \begin{verbatim}
+% ftp://..../VinePlus/cm_setup/Acrobat-reader-5.06-0vl4.nosrc.rpm
+% \end{verbatim}
+%   \end{screen}
+% ただし、パッケージのバージョン名やリリース名は異なる場合が有ります。
+% \item 入手したAcrobat-reader パッケージを解凍する。
+%   \begin{screen}
+% \begin{verbatim}
+% $ rpm -ivh Acrobat-reader-5.06-0vl4.nosrc.rpm
+% \end{verbatim}
+%   \end{screen}
+% \item 解凍によってできた spec ファイルの記述にある Acrobat Reader のソー
+% スを入手し、\verb|~/rpm/SOURCES| におく。
+% \begin{screen}
+% \begin{verbatim}
+% $ head ~/rpm/SPECS/acrobat.spec
+% Summary: PDF (Portable Document Format) File Viewer
+% Name: Acrobat-reader
+% Version: 5.06
+% Release: 0vl4
+% License: Commercial
+
+% Group: X11/Applications/Graphics
+% Source0:ftp://ftp.adobe.com/pub/adobe/acrobatreader/unix/5.x/linux-506.tar.gz <---これと入手
+% Source1:ftp://ftp.adobe.com/pub/adobe/acrobatreader/unix/5.x/jpnfont.tar.gz   <---これを入手
+% Patch: acrobat5-INSTALL.patch
+% \end{verbatim}
+% \end{screen}
+% \item Acrobat-reader パッケージの作成をする 
+%   \begin{screen}
+% \begin{verbatim}
+% $ rpm -ba ~/rpm/SPECS/acrobat.spec
+% \end{verbatim}
+%   \end{screen}
+% 途中で２回、ライセンス条項の表示と、ライセンスを了解するかどうかの質問
+% が表示されます。了解の場合には "accept"と、拒否の場合は"decline"とタイ
+% プして下さい。拒否の場合にはパッケージ作成は行われません。
+
+% 無事パッケージの作成が終了すれば、ディレクトリ\verb|~/rpm/RPMS/i386|
+% に\verb|Acrobat-reader-5.06-0vl4.i386.rpm| というパッケージができま
+% すので、これをインストールしてください。
+% \end{enumerate}
+
+% \subsection{mp3 を聴きたい}
+
+% \vbindex{mp3}を聞くには
+% \vbindex{xmms} コマンド(Vine Linuxデフォルト、パッケージ名 xmms)がお薦めです。
+
+% \subsection{mpeg ファイルを見たい}
+
+% \vbindex{mpeg}を見るには
+% \vbindex{gmplayer} がお薦めです。
+% 研究室内では \verb|apt-get install task-mplayer| でインストールできるようになっ
+% てますが、研究室外でのインストールは少々面倒です。
+
+% 簡単にインストールできるものでは
+% \vbindex{smpeg} (VinePlus)パッケージの \vbindex{gtv} コマンドがお薦めです。
+% \vbindex{xmms} コマンドへのプラグイン \vbindex{smpeg-xmms} (VinePlus)
+% をインストールして xmms コマンドで mpeg ファイルを見ることもできますが、
+% 安定性は smpeg のほうが良いようです。
+
+% \subsection{Real Audio や Real Video を見たい/聴きたい}
+
+% \nmindex{Real Audio}や \nmindex{Real Video}を見たり聴いたりするには
+% コマンド\vbindex{realplay}を使いましょう。
+% RealNetworks 社のホームページ(\verb|http://www.realnetworks.com/|)から
+% Linux 用の RealPlayer の rpm パッケージをダウンロードすることができます。
+% 研究室内でインストールするには、単に\verb|apt-get install RealPlayer|でOKです。
+
+% インストール後にHelp メニューの ``Mime Type/Plugin Install''を選択する
+% と、firefox 等のブラウザのプラグインとしても使えるようになります。
+
+
+% \subsubsection{日本語フォントが正しく表示されないとき}
+
+% 以下のように設定してみてください。
+% \begin{screen}
+% \begin{verbatim}
+% # mkdir /usr/share/fonts/flash6
+% # cd /usr/share/fonts/flash6
+% # ln -sf /usr/lib/X11/fonts/TrueType/kochi-gothic.ttf .
+% # ln -sf /usr/lib/X11/fonts/TrueType/kochi-mincho.ttf .
+% # ftdumpxlfd *.ttf > fonts.dir
+% # /usr/sbin/chkfontpath -a /usr/share/fonts/flash6
+% # /sbin/service xfs reload
+% \end{verbatim}
+% \end{screen}
+
+% \subsection{Firefox で java プラグインは使えないの？$^*$}
+
+% \subsubsection{一般の場合}
+
+% Sun MicosystemsのJAVAサイト\url{http://java.sun.com/}から
+% \nmindex{jdk}(Java Development Kit)か\nmindex{jre}(Java Runtime Environment)のrpmパッケージ
+% をダウンロードできます。
+% % VinePlus の cm\_setup ディレクトリより、j2re か j2sdk の nosrc パッケージを入手
+% % し、これを利用して j2re パッケージを作成・インストールすれば、
+% % mozilla で java プラグインを使えます。
+% % 具体的なrpmパッケージの作成手順は 「pdfファイルを見たい」の項にある acrobat-reader の rpm
+% % パッケージ作成方法と同じです。
+
+% インストールしてもfirefox上で動かないときには、jre/jdk に含まれてい
+% る\verb|libjavaplugin_oji.so|を、
+% \verb|/usr/lib/firefox-2.0/plugins| にシンボリックリンクをはります。以下は例です。
+% \begin{screen}
+% \begin{verbatim}
+% # cd /usr/lib/firefox-2.0/plugins/
+% # ln -sf /usr/java/jdk1.5.0_08/jre/plugin/i386/ns7/libjavaplugin_oji.so .
+% \end{verbatim}
+% \end{screen}
+
+% %% \subsection{mozilla で様々なファイルを見るために、いろいろなアプリをプラグインにしたい。}
+
+% %% mozplugger か plugger をインストールすると便利です。
+
+
+% \section{OpenOffice/StarSuite を使いたい$^*$}
+
+% \nmindex{OpenOffice} はフリーで配布されているオフィスアプリケーションです。
+% \nmindex{StarSuite} は OpenOffice にフォントやビットマップ若干の機能を追加した
+% 商用アプリケーションですが、学校での教育・学習目的ならば無償で利用でき
+% ます。
+% いずれもワープロ、表計算、プレゼンテーションソフト、お絵書きソフトを使うことが
+% 出来ます。
+% MS Windowsでも使うことができ、また、
+% MS Office 形式のファイルの読み込みや保存もある程度できます。
+
+% 詳しい情報とダウンロードは
+% \begin{itemize}
+% \item OpenOffice は OpenOfficeユーザ会: \url{http://ja.openoffice.org/}
+% \item StarSuite は Sun Microsystemsのサイト: \url{http://www.sun.com/software/star/starsuite/}
+% \end{itemize}
+% でどうぞ。
+
+% 各ホームページからダウンロードしたOpenOffice/StarSuiteは
+% シェルスクリプトになっています。
+% これを実行するとインストール用のファイルが解凍されてインストールできます。
+% インストール中になにかトラブルがあったら、解凍されて出てきたrpmファイルを片っ端イ
+% ンストールしてしまえばOKです。
+
+% いずれも起動は\nmindex{soffice}コマンドです。
+
+% \section{Mathematicaを使いたい(研究室内限定)$^*$}
+
+% 研究室では\nmindex{Mathematica} を サーバマシン venus にインストールし
+% てあるので、以下のようにすれば使うことができます。
+% \begin{enumerate}
+% \item  \verb|/home/public/mathematica/Executables/Linux| をPATHに加える
+% \item  コマンド名 mathematica で起動
+% \end{enumerate}
+
+
+%% もしも、ローカルマシンにmathematica をインストールする必要があるときには、
+%% 以下の通りにしてください。
+%% Mathematica のソースを{\ttfamily } においてあ
+%% ります。root になった後、以下の手順で各マシンにインストールできる(はず)です。
+
+%% \begin{screen}
+%% \begin{verbatim}
+%% $ cd /home/venus/public/Mathematica/Unix/Installers/Linux/
+%% $./MathInstaller
+%% Enter top Mathematica directory [/usr/local/mathematica]: (リターン押すだけ)
+%% Enter 'd' for default installation, 'c' for custom, 'h' for help [d]: (リターン押すだけ)
+%% Enter 's' to skip password installation, or 'c' to continue [c]: s 
+%% Enter directory for executable scripts [/usr/local/bin]: (リターン押すだけ)
+%% \end{verbatim}
+%% \end{screen}
+
+%% これでインストールは完了です。
+%% \begin{screen}
+%% \begin{verbatim}
+%% $ mathematica 
+%% \end{verbatim}
+%% \end{screen}
+
+%% 実行時になんかエラーで怒られるけど気にしないでください。
+% 初めての起動のときにはパスワード等を聞かれます。
+% 山口大学では network licenseをもってますので、ライセンスサーバ名
+% を登録してください。(サーバ名は指導教員に聞いてください)
+% なお、山口大学の外からこのライセンスサーバを利用することはできません。
+
+
+
+% \section{日本語変換システムをいろいろ試したい。}
+
+% 以下を比較してみて、一番よいと思う方法を使ってください。
+% \begin{enumerate}
+% \item 現状把握
+% \begin{screen}
+% \begin{verbatim}
+% $ setime status
+% \end{verbatim}
+% \end{screen}
+% と実行。「現在の漢字入力システム」がなにかわかる。
+% Vine Linux 4.xのデフォルトではscimになってます。
+% \item 漢字入力システムを変更してみるwnn を使うには以下を実行します。
+% \begin{screen}
+% \begin{verbatim}
+% $ setime wnn
+% \end{verbatim}
+% \end{screen}
+
+% canna を使うには以下を実行する。
+% \begin{screen}
+% \begin{verbatim}
+% $ setime canna
+% \end{verbatim}
+% \end{screen}
+
+% ただし、実行後にはトラブルをさけるためにはXWindowを一度終了してください。
+
+% \end{enumerate}
+
+% \section{その他のアプリケーション}
+% \begin{center}
+% \begin{tabular}[t]{l}\hline
+%   グラフを描く\\  \hline
+%     xmgrace \\
+%    gnuplot \\
+%    ngraph \\
+%    Plotmtv \\
+%    starSuite/OpenOffice(SpreadSheet)\\
+%   \hline
+% \end{tabular}\qquad 
+% \begin{tabular}[t]{l}\hline
+% 絵を書く。ロゴをつくる。\\ \hline
+%    StarSuite/OpenOffice(Draw) \\
+%    tgif \\
+%    xpaint \\
+%    sketch \\
+%    etc... \\
+%   \hline
+% \end{tabular}
+% \vspace{1cm}
+
+% \begin{tabular}[t]{l}\hline
+% 画像を見る。画像をいじる。 \\\hline
+%    gqview \\
+%    display (ImageMagic) \\
+%    xv \\
+%    gimp \\
+%    etc...\\
+%   \hline
+% \end{tabular}\qquad 
+% \begin{tabular}[t]{l}\hline
+% 電卓 \\ \hline
+%    xcalc \\
+%    gcalctool \\
+%    kcalc \\
+%   \hline
+% \end{tabular}
+% \end{center}
+
+
+\chapter{CVS(バージョン管理ツール)の使い方$^*$}
+
+\nmindex{CVS}は一つのアプリケーションを何人かで共同開発する場合に使う。
+基本的にはサーバに最新ファイル(レポジトリ)を格納しておき，
+作業開始にはそのファイルを入手，作業終了時にはサーバへの格納を行う。
+複数の人がほぼ同時にプログラム中の同じ場所の修正をした場合は不整合が生
+じれが，この場合はサーバへの格納時にどこに不整合が生じたかという情報
+が得られるので、修正も容易にできる。
+また，いつでも任意の過去の状態に戻すこともできる。
+
+
+\section{CVSを使うための設定}
+
+{\ttfamily \~{}/.bashrc}に以下の行を加える。
+\begin{screen}
+\begin{verbatim}
+export CVSROOT=/home/venus/cvs
+export CVSEDITOR="/usr/bin/ng"
+\end{verbatim}
+\end{screen}
+CVSROOTはレポジトリを格納するディレクトリを指定する。
+% この例は格納場所はローカルサーバ上ということになります．
+
+cvsサーバchaplin.orgにアカウントchaplinを持っておりssh接続
+でcvsサーバに接続して、そこのレポジトリを利用する場合には以下の様に
+設定する。
+\begin{screen}
+\begin{verbatim}
+export CVS_RSH='/usr/bin/ssh'
+export CVSROOT=':ext:charles@chaplin.org:/home/cvs'
+export CVSEDITOR="/usr/bin/ng"
+\end{verbatim}
+\end{screen}
+この例で、CVSEDITORに設定している ng はemacsと似た操作感の軽いエディタ。
+vi など他の軽いエディタでも良いが、emacs など重いエディタにはしないほ
+うが良い。
+上記設定をしたら、ログインし直すか、以下を実行して {\ttfamily \~{}/.bashrc}
+を読み込む。
+\begin{screen}
+\begin{verbatim}
+source ~/.bashrc
+\end{verbatim}
+\end{screen}
+
+\section{CVSの使いかた}
+mocaという名前のレポジトリのファイルをはじめて取り出すには、
+\begin{screen}
+\begin{verbatim}
+$ cvs checkout moca
+\end{verbatim}
+\end{screen}
+これで moca というディレクトリができて、mocaに登録されているファイルが
+入る。
+
+作業はmoca/以下でやって修正加えた時には、このmoca/以下で
+\begin{screen}
+\begin{verbatim}
+$ cvs commit
+\end{verbatim}
+\end{screen}
+この時、コメントを求められるので、修正点を書いてください。
+
+最新版に追随するには
+\begin{screen}
+\begin{verbatim}
+$ cvs update -d
+\end{verbatim}
+\end{screen}
+
+新しいファイルをつくったときには
+\begin{screen}
+\begin{verbatim}
+$ cvs add <file name>
+$ cvs commit
+\end{verbatim}
+\end{screen}
+
+ファイルの更新履歴を見るには
+\begin{screen}
+\begin{verbatim}
+$ cvs log
+\end{verbatim}
+\end{screen}
+
+手元のファイルが登録されているものと同じか知るには
+\begin{screen}
+\begin{verbatim}
+$ cvs status
+\end{verbatim}
+\end{screen}
+各ファイルについて {\ttfamily Status:Up-to-date}と表示されたら、手元のファ
+イルはCVSに登録されている最新版と同じということ。
+
+手元のファイルとcvsの登録されているものの違いを見るには
+\begin{screen}
+\begin{verbatim}
+$ cvs diff
+\end{verbatim}
+\end{screen}
+
+ファイルを古いものに戻すこともできる。
+詳しくはgoogleさんに聞いて下さい。
+% 以下も。
+% \begin{itemize}
+% \item 
+% \url{http://radiofly.to/nishi/cvs/}
+% \item 
+% \url{http://www.race.u-tokyo.ac.jp/users/moro/cvs/basics.html}
+% \end{itemize}
+
+
+
+\chapter{システム管理$^{**}$}
+
+\section{システム環境の設定}
+アクセス制限(ファイアウォール)、利用するキーボードやマウスの種類の変更、
+サウンドカードの設定はroot権限で\vbindex{setup}コマンドを使えば設定で
+きる。
+\begin{screen}
+\begin{verbatim}
+  # /usr/sbin/setup
+\end{verbatim}
+\end{screen}
+
+GUIベースの設定ツール\nmindex{webmin}も
+様々なシステム設定をするのに便利。
+\verb|apt-get install webmin|でインストールし、ブラウザで
+\url{https://localhost:10000/}にアクセスすれば利用できる。
+
+% \section{マシンの時計を定期的に標準時刻にあわせる(NTPの設定)}
+
+% \bfindex{NTP} (The Network Protocol)を利用すると、標準時刻を提供する計算機
+% (ntp サーバ)の時刻に各クライアントの時刻をあわせることが出来ます。
+% ここでは、ntpサーバが{\ttfamily zeus.bcl.sci.yamaguchi-u.ac.jp}であるとし
+% て、各クライアント設定する例を説明します。
+% \begin{enumerate}
+% \item rootになる。
+% \item {\ttfamily \# cd /etc/ntp}
+% \item {\ttfamily \# echo "zeus.bcl.sci.yamaguchi-u.ac.jp" {$>$} step-tickers}
+% \item \vbindex{/etc/ntp.conf} を以下のように編集する
+% \begin{verbatim}
+% #server 127.127.1.0     # local clock        <-- 頭に # を加える
+% #fudge  127.127.1.0 stratum 10               <-- 頭に # を加える
+
+% server  zeus.bcl.sci.yamaguchi-u.ac.jp    
+% \end{verbatim}
+% \item  {\ttfamily \# /sbin/chkconfig ntpd on}
+% \item  ちょっと今の時刻をみてみる
+% \begin{verbatim}
+% # date
+% \end{verbatim}
+ 
+% \item  時刻あわせツールを起動
+% \begin{verbatim}
+% # /etc/rc.d/init.d/ntpd start
+% \end{verbatim}
+ 
+% \item  もいちど時刻をみてみて、時刻の修正がされたか確認(もともとあまり
+% 時刻が違ってなければわかんないけど) 
+% \begin{verbatim}
+% # date
+% \end{verbatim}
+% \end{enumerate}
+
+
+
+\section{NFS(Network File System)}
+
+研究室では venus のハードディスクに各ユーザのホームディレクトリを用意
+し、どのPCにログインしても venus のホームを利用するように設定してある。
+venus のようにディスクスペースを提供するマシンを\bfindex{ファイルサーバ}
+もしくは、\bfindex{NFS}(Network File System)\textbf{サーバ}と呼ぶ。
+
+ここでは、ファイルサーバの設定と、ファイルサーバを利用する各クライアン
+トの設定を説明する。
+
+
+\subsection{NFSサーバの設定}
+
+ファイルサーバ hoge.org のディレクトリ{\ttfamily /home}を共有したいと
+きには、共有許可を出すための設定ファイル\vbindex{/etc/exports}に次のよ
+うに書き込む。
+\begin{screen}
+\begin{verbatim}
+/home   192.168.0.2(rw), *.fuga.org(ro)
+\end{verbatim}
+\end{screen}
+
+この例では、IPアドレスが192.168.0.2のマシンに対して読み書き両方の許可
+(rw)を出し、fuga.org というドメイン名をもつマシンに対して読込み許
+可(ro)を出している。
+
+{\ttfamily /etc/exports}の編集を行ったら、この設定を有効にするため
+\vbindex{exportfs}コマンドを実行する。
+\begin{screen}
+\begin{verbatim}
+# /usr/sbin/exportfs -a
+\end{verbatim}
+\end{screen}
+(exportfs のオプションについては man exportfs参照)
+
+最後にNFSサーバデーモンが起動しているかを確認する。
+\begin{screen}
+\begin{verbatim}
+# /etc/rc.d/init.d/nfs status
+\end{verbatim}
+\end{screen}
+停止している場合には起動を行う。
+\begin{screen}
+\begin{verbatim}
+# /etc/rc.d/init.d/nfs start
+\end{verbatim}
+\end{screen}
+
+
+\subsection{NFSクライアントの設定}
+
+ファイルサーバ hoge.org の{\ttfamily /home}を、クライアント上で
+{\ttfamily /home/hoge}として利用するには、以下のコマンドを実行する。
+\index{mount}
+\begin{screen}
+\begin{verbatim}
+# mount -t nfs hoge.org:/home /home/hoge
+\end{verbatim}
+\end{screen}
+
+この作業を 「hoge.org のホームをマウントする」と言う。
+これで{\ttfamily /home/hoge}をローカルディスクと同じ様に使える。
+もし、うまくいかなければ、mount 実行のエラーメッセージや
+hoge.org の{\ttfamily /var/log/messages}に出るエラーメッセージが
+修正のヒントになる。
+
+
+
+\section{autofs を利用したマウント設定\label{sec:autofs}}
+
+
+研究室では、\vbindex{autofs}を使ってどのPCからログインしてもファイルサー
+バ(venus)にあるホームを自動でマウントするように設定してある。
+% つまりmountを自動化するのが autofs (autofs パッケージ)の機能であり、
+autofs を使うと、特定のディレクトリにアクセスするだけで、自動的にmount
+を行い、一定時間アクセスすると自動で umount を行ってくれるので、大変便利。
+
+ここでは、{\ttfamily /misc/cd}にアクセスがあったときに、
+\begin{screen}
+\begin{verbatim}
+$ mount -t iso9660 /dev/cdrom /misc/cd
+\end{verbatim}
+\end{screen}
+
+を自動で実行して、{\ttfamily /misc/dvd}にアクセスがあったときには、
+\begin{screen}
+\begin{verbatim}
+$ mount /dev/sda /mnt/dvd
+\end{verbatim}
+\end{screen}
+
+を実行するように設定する。
+
+まず autofs の設定ファイル{\ttfamily /etc/autofs.master}には次のように書
+く。
+\begin{screen}
+\begin{verbatim}
+/misc   /etc/auto.misc  --timeout=60
+\end{verbatim}
+\end{screen}
+
+これは、「ディレクトリ{\ttfamily /misc} にアクセスがあったときにはファ
+イル{\ttfamily /etc/auto.misc} を参照しなさい」という意味。
+最後の{\ttfamily --timeout=60} は、{\ttfamily /misc} へのアクセスが60秒無い
+ときには、umount するためのオプション設定。
+
+次にファイル{\ttfamily /etc/auto.misc}を次のように編集する。
+\begin{screen}
+\begin{verbatim}
+cdrom           -fstype=iso9660,ro,users :/dev/cdrom
+dvd             -fstype=ext2,users      :/dev/scd0
+\end{verbatim}
+\end{screen}
+
+一行目の第一フィールド(cdrom)は、{\ttfamily /misc/cdrom}にアクセスがあった
+とき、そこに第三フィールドのデバイスをmountすることを意味する。
+第二フィールドの{\ttfamily -fstype=}からはじまる部分は、mount 時のオプショ
+ンであり、{\ttfamily /etc/fstab}に書くマウントオプションと同じ。
+
+設定を行ったら、ディレクトリ{\ttfamily /misc}を作成し、autofs デーモン
+を起動する。
+このとき、{\ttfamily /misc/cdrom}や{\ttfamily /misc/dvd}は作る必要は無
+い。
+\begin{screen}
+\begin{verbatim}
+# mkdir /misc
+# /etc/rc.d/init.d/autofs start
+\end{verbatim}
+\end{screen}
+
+PCの起動時にautofsを自動で立ち上げるにはchkconfigで設定する。
+
+autofs を使って NFSマウントを行うこともできる。
+例えば、次のように設定すれば、{\ttfamily /nfs/hoge/}以下にアクセスする
+と NFSサーバ hoge.org の{\ttfamily /home/}が自動的に{\ttfamily
+  /nfs/hoge}にマウントされる。
+\begin{screen}
+\begin{verbatim}
+# /etc/auto.master 修正版
+/misc   /etc/auto.misc  --timeout=60
+/nfs   /etc/auto.home  --timeout=60
+/home
+\end{verbatim}
+\end{screen}
+
+\begin{screen}
+\begin{verbatim}
+# /etc/auto.nfs の中身
+hoge      hoge.org:/home
+\end{verbatim}
+\end{screen}
+
+もし、NFSサーバ hoge.org の{\ttfamily /home} を、クライアント上で
+{\ttfamily /home/hoge}
+にマウントしたいときには、上記の作業の後、シンボリックリンクを張ればOK。
+\begin{screen}
+\begin{verbatim}
+# ln -s /nfs/hoge /home/hoge
+\end{verbatim}
+\end{screen}
+
+
+\section{ちょっとしたセキュリティ向上}
+
+LANに接続されている計算機には、世界中からのアクセスが可能なので、
+対策を練っておかないど簡単に不正アクセスされてしまう。
+% この言い方は決しておおげさではありません。
+% きちんとファイアウォール等で守られたマシンでなければ、
+% \vbindex{/var/log/messages}等を見れば、その痕跡をきっと発見できるでしょう。
+パスワードが盗まれたりしなくても、怪しげなネットワーク資源やデータの置
+き場所にされたり、他のサイトを攻撃する中継地点にされてしまうこともある。 
+
+ここでは、簡単にできるセキュリティ強化の基本を述べる。
+
+
+\subsection{外部からアクセスしたいとき}
+
+% rsh や telnet を利用するのは危険です。ログイン時にネットワーク上にユー
+% ザ名やパスワードが平文で流れてしまい、簡単に盗聴されてしまいます。
+暗号化通信を行える ssh を使う。
+暗号化通信をできない telnet や rsh によるアクセスはできないように設定し、
+また可能であればアクセスを許すサイトも限定する。
+アクセス制限はsetupコマンドの「ファイアウォール設定」でできるが、
+webminも便利。
+% (\ref{sec:inetd} {(inetdによるサービス提供の制限)}節参照)
+
+
+\subsection{余計なサービス(デーモン)停止}
+
+起動時に自動で起動するデーモンは{\ttfamily /usr/sbin/ntsysv}や、
+{\ttfamily /sbin/chkconfig --list}で確認することができます
+(初心者にやntsysvのほうがおすすめ)。
+使わないサービスは極力起動しないようにしましょう。
+不要なサービスは、PCの負荷を大きくするだけでなく、セキュリティホールが
+あれば侵入を許したり悪用されたりする原因となります。
+
+
+% \subsection{inetdによるサービス提供の制限\label{sec:inetd}}
+
+% ネットワークツールinetdにより、外部アクセスからの要求のうち、どのよう
+% な要求に答えるか、個別に設定することが出来ます。
+
+
+% \subsubsection{{\ttfamily/etc/inetd.conf}}
+
+% {\ttfamily /etc/inetd.conf}に、inetd で要求をうけつけることができるサービ
+% スの一覧が書かれています。全てコメントを基本的として、どうしても必要な
+% 行だけコメントをはずしましょう。なお、ftp サービスについては proftpd
+% を用いているなら proftpd の設定ファイル({\ttfamily /etc/proftpd.conf})で
+% アクセス制限を、httpd サービスについては apache の設定ファイル
+% ({\ttfamily /etc/httpd/conf/httpd.conf})で制限を行います。 
+
+% 設定をしたら、inet を再起動します。
+% \begin{screen}
+% \begin{verbatim}
+%   # /etc/rc.d/init.d/inet restart
+% \end{verbatim}
+% \end{screen}
+
+
+% \subsubsection{{\ttfamily /etc/hosts.$\{$allos,deny$\}$}によるアクセスサイトの制限}
+
+% まず、全てのサイトからのあらゆるアクセスを禁止するため、
+% {\ttfamily /etc/hosts.deny}に以下のように書きます。
+% \begin{screen}
+% \begin{verbatim}
+% $ cat /etc/hosts.deny
+% ALL:ALL
+% \end{verbatim}
+% \end{screen}
+
+
+% その次に、どのサイトにどのようなアクセス許可を出すかを
+% {\ttfamily /etc/hosts.allow}に書きます。
+% \begin{screen}
+% \begin{verbatim}
+% $ cat /etc/hosts.allow
+% sshd: 192.168.0.0/255.255.255.0 133.62.236.96/255.255.255.224 
+% ALL: 192.168.0.1 192.168.0.4 
+% \end{verbatim}
+% \end{screen}
+
+% ここでは、全てのサービスを 192.168.0.1 と 192.168.0.4 から、
+% sshd へのアクセスを 192.168.0.0/255.255.255.0 からに対して
+% 許可しています。
+
+% このように、まず全てを禁止してから、特定のサイトおよびサービスに関し
+% て許可を出すという順番に気をつけてください。
+
+
+\section{各ユーザにディレクトリ利用制限(quota)をつくる}
+
+特定のユーザが自分のホームにたくさんのファイルをおくと、
+その分他の人が使えるディスク容量が減ってしまいます。
+みんながハードディスクを無駄に消費すると、バックアップのコストが高くな
+る。
+不慣れな操作により無駄に大きなファイルを作ってしまい、それに気づかずに
+いることもある。
+
+このようなことを防ぐためには各ユーザに対して
+\bfindex[でぃれくとりしようせいげん]{ディレクトリ使用制限}
+(\nmindex{quota})を設けると便利。
+以下では{\ttfamily /home}としてマウントしている
+{\ttfamily /dev/hda3}に使用制限をつける場合を説明する。
+ユーザグループに対して、制限をつけることもできる。
+
+\subsection{quota をかけるパーティションの設定}
+まず\vbindex{/etc/fstab}の編集をする。
+ユーザに対してquota をかけるパーティションには、オプションに 
+{\ttfamily usrquota}を指定する。
+ユーザグループに quota をかけるときには{\ttfamily grpquota}を指定する。
+\begin{screen}
+\begin{verbatim}
+/dev/hda3   /home    ext2    defaults,usrquota,grpquota        1 2
+                                      ~~~~~~~~~~~~~~~~~
+\end{verbatim}
+\end{screen}
+
+編集後は、システムを再起動するか、以下のコマンドにより quota を有効に
+する。
+\index{quotaon}
+\begin{screen}
+\begin{verbatim}
+# quotaon -a              (全ての quota 設定を有効にする)
+# quotaon /dev/hda3       (特定の quota 設定を有効にする)
+\end{verbatim}
+\end{screen}
+
+
+\subsection{ユーザに quota をかける}
+\vbindex{setquota} コマンドで quota を設定する。
+quota を設定するユーザ名を funya とすると
+\begin{screen}
+\begin{alltt}
+# /usr/sbin/setquota funya /dev/hda3 10000 15000 0 0
+{\scriptsize# setquota ユーザ名  <パーティション名> <softlimit> <hardlimit> <i-node soft limit> <i-node hard limit>}
+\end{alltt}
+\end{screen}
+
+
+各ユーザの quota は、\verb|setquota| を使わずに、quota編集コマンド
+\vbindex{edquota} で設定することも出来る。
+\begin{screen}
+\begin{verbatim}
+# /usr/sbin/edquota funya
+                    ユーザ名
+\end{verbatim}
+\end{screen}
+
+\subsection{quota 状況をみる}
+repquota コマンドで、現在のquotaの設定情報を知ることができる。
+\begin{screen}
+\begin{verbatim}
+# /usr/sbin/repquota -a   (全てのファイルシステムのquota情報を知りたいとき)
+# /usr/sbin/repquota /dev/hda3   (特定のファイルシステムのquota情報を知りたいとき)
+\end{verbatim}
+\end{screen}
+
+\subsubsection{quota をやめる}
+quota の終了は quotaoff コマンドで行える。
+\begin{screen}
+\begin{verbatim}
+# quotaoff -a              (全ての quota 設定を無効にする)
+o# quotaoff /dev/hda3       (特定のパーティションに対する quota 設定を無効にする)
+\end{verbatim}
+\end{screen}
+
+設定を完全に無効にするには {\ttfamily /etc/fstab}のquota設定の削除も忘れ
+ないようにすること。
+
+
+
+\chapter{トラブル!!!$^*$}
+
+\section{ログインできない!!!!!}
+
+研究室では\nmindex{NIS}(Network Information Service)というシステムを用
+いてユーザパスワードを一元管理している。
+このようにパスワード等をNISで共有している環境でログインできなくなる
+時には、大抵ネットワークのトラブル等があって、パスワード情報の共有
+が出来なくなっていることが多い。
+原因を確認するは以下を順に試す。
+
+\begin{enumerate}
+\item root でログインする(時間がかかることがある)
+\item \label{item:ypbind}以下を実行(NISクライアントプログラムの実行）
+  \begin{screen}
+\begin{verbatim}
+$ cd /etc/rc.d/init.d
+$ ./ypbind stop
+$ ./ypbind start
+\end{verbatim}
+  \end{screen}
+\item このあと、\index{ypwhich}
+  \begin{quote}
+\begin{verbatim}
+$ ypwhich
+\end{verbatim}
+  \end{quote}
+    を実行して、NISサーバの名前が出てくればログインできるはず。
+    このときは、ntsysv コマンドで、ypbind が起動時に実行されるように設
+    定を行って作業終了。
+  \item ログインできなければ、他のマシン(NISサーバ以外)からログインで
+    きるかを試す。できるならば、ネットワークの設定がおかしくないか、次節
+    にしたがって確認する。
+  \item NISサーバ以外のどのマシンでもログインできなければ、NISサーバの
+    ネットワーク設定を確認。サーバのネットワークに問題がなければ、NIS
+    サーバ上で以下を実行。（NISサーバの起動）
+  \begin{screen}
+\begin{verbatim}
+$ cd /etc/rc.d/init.d
+$ ./ypserv stop
+$ ./ypserv start
+\end{verbatim}
+  \end{screen}
+  この後再び、ステップ\ref{item:ypbind}を実行する。
+
+\end{enumerate}
+
+\section{ネットワークに接続できない？}
+
+\index{ifconfig}
+\begin{enumerate}
+\item \verb|/usr/sbin/ifconfig -a|を実行する。
+  \begin{enumerate}
+  \item eth0 のエントリが無ければ、ネットワークデバイスが認識されていな
+    い。対処\ref{item:netcheck}でどうしようもなければ誰か詳しい人に聞く。
+  \item eth0 のエントリがあれば、設定に問題がある可能性大
+    (以下の対処方法リストの\ref{item:netcheck}参照)。
+  \end{enumerate}
+\item 研究室内のマシン（自分以外）に ping をかける。
+  \begin{enumerate}
+  \item ping が帰って来なかったら下記の\textbf{対処方法リスト}
+    \ref{item:plugcheck},\ref{item:netcheck}を順に確認
+  \item ping が帰って来たら次に進む
+  \end{enumerate}
+\item 研究室外の同じセグメントのマシン(192.168.0.xxx, xxx はIPアドレス
+  リストを見ていろいろためす)に ping をかける。 
+  \begin{enumerate}
+  \item ping が帰って来ないなら\textbf{対処方法リスト}
+    \ref{item:netcheck}で、特にルートアドレスの設定を確認する。
+  \item ping が帰ってくるなら次へ。
+  \end{enumerate}
+\item 大学外のマシンへのドメイン名での接続ができない場合。
+  \begin{quote}
+    ネームサーバ(設定ファイル\vbindex{/etc/resolv.conf}に書いてあ
+    るnameserverのIPアドレス)にping してみる。
+    ping が帰って来ないならおそらくネームサーバが落ちてるので、他のネー
+    ムサーバにアクセスするように\verb|resolv.conf|を書き換えるか、誰か
+    に助けを求める。
+  \end{quote}
+\end{enumerate}
+
+\noindent
+\textbf{対処方法リスト}
+\begin{enumerate}
+\item \label{item:plugcheck}ネットワークケーブルがしっかり刺さっているか確認
+\item \label{item:netcheck}
+  \vbindex{network-admin}コマンドで、IPアドレス等ネットワーク情報の確
+  認後、インターフェースeth0を起動する。
+\end{enumerate}
+
+\section{固まった!!!!!}
+
+なんらかの作業をしていて画面が固まってしまい、キー入力を受け付けなくなっ
+たときには、以下を順に試す。
+
+\begin{enumerate}
+\item 仮想画面に移って問題と思われるプロセスをkillする
+\item 他の端末から、rsh や ssh などで入って、問題と思われるプロセスをkillする
+\item X Window を立ち上げているときには \{CM\}-BackSpace を押すと X
+Window が終了できる。
+\item 以上でダメなら、周りに助けを求める
+\item \textbf{(初心者はやってはいけない)}助けがなければ、数分様子を見てから、
+  \{CM\}-Delete でシステムの終了を試みる
+\item \textbf{HDが壊れるかもしれないが}, リセットボタンを押す。
+\end{enumerate}
+
+\addcontentsline{toc}{chapter}{索引}
+\printindex
+\end{document}
