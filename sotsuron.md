@@ -11,6 +11,9 @@ fancy: false
 geometry: width=15cm, height=22cm
 ---
 
+この文書の最新版は以下のURLで参照できます。
+- [https://github.com/jnishii/Howto/blob/master/sotsuron.md](https://github.com/jnishii/Howto/blob/master/sotsuron.md)
+
 # 確認事項
 
 -   名前・連絡先(住所・電話・メール)確認
