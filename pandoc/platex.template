@@ -19,7 +19,9 @@ $endif$
    \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
 \begin{document}
-
+$if(titlepage)$
+\pagestyle{empty}
+$endif$
 $if(listing)$
 \renewcommand{\lstlistingname}{リスト}
 \lstset{language = c,
@@ -47,7 +49,7 @@ tabsize = 4,
 $endif$
 
 $if(twocolumn)$\twocolumn[$endif$
-\pagestyle{empty}
+\noindent
 \rule{\linewidth}{0.3pt}
 \begin{center}
   \textbf{\LARGE $title$}
@@ -60,14 +62,21 @@ $if(twocolumn)$\twocolumn[$endif$
   $if(toc)$
   {\small
   \begin{quote}
-%    \begin{screen} % screen does not work in lualatex
+  $if(screen)$
+    \begin{screen} % screen does not work in lualatex
+  $endif$
       \hypersetup{linkcolor=black}
       \setcounter{tocdepth}{$toc-depth$}
       \tableofcontents
-%    \end{screen}\vspace{3mm}
+  $if(screen)$
+    \end{screen}\vspace{3mm}
+  $endif$
   \end{quote}}
   %]
-  \rule{\linewidth}{0.3pt}
+    $if(screen)$
+    $else$
+      \rule{\linewidth}{0.3pt}
+    $endif$
   $endif$
 $if(twocolumn)$]$endif$
 
