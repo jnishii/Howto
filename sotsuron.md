@@ -42,9 +42,8 @@ GitHub/Gitの使い方は西井のホームページ参照して，以下を実�
 
 - GitHubにアカウントを作って，西井に連絡する
 - 以下のリポジトリのcloneをつくる
-  - bcl-group/Howto.git : 宿題のテキスト等がある
-  - bcl-group/bcl-admins.git : インストールマニュアルがある
-
+  - bcl-group/bcl-admins.git : インストールマニュアル等がある
+  - jnishii/Howto.git : 西井のテキスト集。宿題のテキスト等がある
 ```
 git clone https://github.com/bcl-group/bcl-admins.git
 git clone https://github.com/jnishii/Howto.git
@@ -77,7 +76,7 @@ $ git push orign master
 ## 楽しいお勉強
 
 1. 以下を印刷する。どれもリポジトリHowtoにあるもの。
-  - unix.pdf :UNIX/LINUXの基本操作($*$印がついてないセクションを読む)　<= 印刷済み
+  - unix.pdf : UNIX/LINUXの基本操作($*$印がついてないセクションを読む)　<= 印刷済み
   - unix-lesson.pdf : UNIX演習
   - (近日中に追加を連絡します)
 2. 各演習をどんどんする
