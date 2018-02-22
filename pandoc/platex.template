@@ -19,7 +19,9 @@ $endif$
    \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
 \begin{document}
-
+$if(titlepage)$
+\pagestyle{empty}
+$endif$
 $if(listing)$
 \renewcommand{\lstlistingname}{リスト}
 \lstset{language = c,
@@ -47,7 +49,7 @@ tabsize = 4,
 $endif$
 
 $if(twocolumn)$\twocolumn[$endif$
-\pagestyle{empty}
+\noindent
 \rule{\linewidth}{0.3pt}
 \begin{center}
   \textbf{\LARGE $title$}
@@ -57,16 +59,33 @@ $if(twocolumn)$\twocolumn[$endif$
 西井 淳
 \end{flushright}
 \rule{\linewidth}{0.3pt}
-{\small
-\begin{quote}
-\begin{screen}
-\tableofcontents
-\end{screen}\vspace{3mm}
-\end{quote}}
+  $if(toc)$
+  {\small
+  \begin{quote}
+  $if(screen)$
+    \begin{screen} % screen does not work in lualatex
+  $endif$
+      \hypersetup{linkcolor=black}
+      \setcounter{tocdepth}{$toc-depth$}
+      \tableofcontents
+  $if(screen)$
+    \end{screen}\vspace{3mm}
+  $endif$
+  \end{quote}}
+  %]
+    $if(screen)$
+    $else$
+      \rule{\linewidth}{0.3pt}
+    $endif$
+  $endif$
 $if(twocolumn)$]$endif$
 
+$if(titlepage)$
 \newpage
+$endif$
+$if(fancy)$
 \pagestyle{fancy}
+$endif$
 $body$
 
 \end{document}

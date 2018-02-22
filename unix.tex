@@ -13,7 +13,7 @@
 \usepackage[hypertex]{hyperref}
 \usepackage{alltt}
 \usepackage{makeidx}
-\usepackage{myindex}
+\usepackage{inputs/myindex}
 \makeindex
 
 \begin{document}
@@ -32,7 +32,7 @@
 \today 版\\
 西井 淳
 \end{flushright}
-\rule{\linewidth}{1pt} 
+\rule{\linewidth}{1pt}
 
 \newpage
 \pagenumbering{roman}
@@ -48,7 +48,7 @@
 
 この原稿では、UNIX/Linuxの基本的な操作方法をごく簡単に説明してい
 ます。
-ただし，Vine Linux 6.2に準拠して書いてますので、それ以外のUNIX/Linux環
+ただし，Vine Linux 6.4に準拠して書いてますので、それ以外のUNIX/Linux環
 境では若干異なる場合もあります。
 例えば，UNIXコマンドは Mac OS X でもほぼ共通に使えますが、コマンドオプショ
 ンが若干違う場合もあります。
@@ -72,7 +72,7 @@
 \end{quote}
 ことを示し、
 \begin{quote}
-  \verb|C-x k| は、Ctrlキーを押しながら x をまず押し、次にCtrlキーを離  
+  \verb|C-x k| は、Ctrlキーを押しながら x をまず押し、次にCtrlキーを離
   して k を押す
 \end{quote}
 ことを示します。また、
@@ -120,7 +120,7 @@ Linuxを起動すると通常自動でX Window Systemが起動してログイン
 
 X Window 上では、複数のウィンドウの管理をしたり、さまざまなデスクトップ
 環境を提供するシステムとして、\bfindex{ウィンドウマネージャ}と呼ばれる
-システムが起動される。 
+システムが起動される。
 Vine Linux 6.xの標準ウィンドウマネージャは \bfindex{GNOME} (上部に
 メニュー)であるが、
 他にもいろいろあり、高機能な\bfindex{KDE}も有名である。
@@ -298,9 +298,9 @@ ls [オプション]& 現在のディレクトリのファイル一覧を表示�
 \qquad -R & サブディレクトリにあるファイルも再帰的に表示\\
 rm [オプション] ＜ファイル名＞ & ファイル削除 \\
 \qquad -r & 指定ディレクトリと、その下にあるファイル全てを再帰的に削除\\
-\small{cp ＜ソース＞ ＜コピー先＞} & 
+\small{cp ＜ソース＞ ＜コピー先＞} &
 ファイル・ディレクトリのコピー\\
-\small{mv ＜ソース＞ ＜移動先＞} & 
+\small{mv ＜ソース＞ ＜移動先＞} &
 ファイル・ディレクトリの移動(名前変更)\\
 \hline
 \end{tabular}
@@ -553,25 +553,25 @@ nkf [オプション] ファイル名 & 文字コードの判定, 変換\\
 ているかを確認 \\
 \verb|ssh <IPアドレス or ホスト名>| & 指定したホストにログイン(通信は暗号化)
 \\
-\verb|ssh <ユーザ名>@<IPアドレス or ホスト名>| & 
+\verb|ssh <ユーザ名>@<IPアドレス or ホスト名>| &
 指定したホストに指定ユーザ名でログイン(通信は暗号化)
 \\
-\verb|scp <IPアドレス or ホスト名>:<ファイル1> <ファイル名2>|& 
+\verb|scp <IPアドレス or ホスト名>:<ファイル1> <ファイル名2>|&
 指定したホストのファイルを、指定ファイル名でコピー(通信は暗号化)
 \\
 % \verb|rsh <IPアドレス or ホスト名>| & 指定したホストにログイン
 % \\
-% \verb|rsh -l <ユーザ名> <IPアドレス or ホスト名>| & 
+% \verb|rsh -l <ユーザ名> <IPアドレス or ホスト名>| &
 % 指定したホストに指定ユーザ名でログイン
 % \\
-% \verb|rcp <IPアドレス or ホスト名>:<ファイル> <ファイル名>|& 
+% \verb|rcp <IPアドレス or ホスト名>:<ファイル> <ファイル名>|&
 % 指定したホストのファイルを、指定ファイル名でコピー
 % \\
 % \verb|finger @<IPアドレス or ホスト名>| & 指定したホストに誰がログインしてい
 % るかを確認\\
 % \verb|finger <ユーザ名>@<IPアドレス or ホスト名>| & 指定したホストに指定ユー
 % ザがログインしているかを確認\\
-% \verb|chfn| & finger で表示される自分に関する情報を変更する\\ 
+% \verb|chfn| & finger で表示される自分に関する情報を変更する\\
 \hline
 \end{tabular}}
 % \end{quote}
@@ -608,7 +608,7 @@ round-trip min/avg/max = 0.3/0.3/0.4 ms
 % \begin{quote}
 % \verb|rsh| での通信はパスワードも含め暗号化されない
 % \end{quote}
-% ので、通信内容  
+% ので、通信内容
 % を盗聴されるとすぐにパスワードが漏洩してしまい危険である（インターネッ
 % ト上にあるフリーソフトで簡単に盗聴できてしまう）。
 % よって\textbf{通信にはできるかぎりsshを使う}こと。
@@ -628,7 +628,7 @@ Are you sure you want to continue connecting (yes/no)? yes
 \begin{screen}
 \begin{verbatim}
 Host 'venus' added to the list of known hosts.
-jun@venus's password: 
+jun@venus's password:
 Last login: Thu Aug 10 11:47:30 2000 from muse.hogehoge.ac.jp
 \end{verbatim}
 \end{screen}
@@ -648,7 +648,7 @@ $ scp venus:doc/memo .
 %% \begin{quote}
 %% \begin{tabular}[t]{lp{6cm}}\hline
 %% コマンド & 意味 \\ \hline
-%% cut      &  各行から選択した部分を表示する    \\ 
+%% cut      &  各行から選択した部分を表示する    \\
 %% \hline
 %% \end{tabular}
 %% \end{quote}
@@ -668,7 +668,7 @@ $ scp venus:doc/memo .
 % \end{verbatim}
 % \end{screen}
 % 上の例では venus.hogehoge.ac.jp に ログイン名 chaplin がAug 8 にログイン
-% しているが、 
+% しているが、
 % 一日マシンを操作した形跡(Idle 1d)がないこと、
 % ログイン名 monroe は Aug 10 にログインして、27 分前まで操作していたこと
 % がわかる。
@@ -1002,7 +1002,7 @@ $ chmod +x ls.sh
 これは、ls.sh を実行可能なファイルにする命令である。(実行許可を取り消す
 には\verb|$ chmod -x ls.sh|とする。)
 ここで \verb|~/ls.sh|を実行すれば、現在のディレクトリ名と、中にある
-ファイル一覧が表示される(echo は 文等を表示する命令で、\verb|-n| 
+ファイル一覧が表示される(echo は 文等を表示する命令で、\verb|-n|
 は表示後に改行しないためのオプション)。
 このように、実行したい命令をずらずらと書いたファイルをつくり、
 ファイルの先頭に\verb|#!/bin/bash|という行をいれれば、
@@ -1025,8 +1025,8 @@ $ chmod +x ls.sh
 
 echo "これが第0引数" $0
 echo "これが第1引数" $1
-echo "これが全ての引数" $@ 
-echo "これが引数の数" $# 
+echo "これが全ての引数" $@
+echo "これが引数の数" $#
 \end{verbatim}
 \end{screen}
 
@@ -1107,9 +1107,9 @@ bin
 
 \subsection{シェルスクリプトの終了}
 
-シェルスクリプトは 
+シェルスクリプトは
 \vbindex{exit}が実行された時終了する。
-正常終了の時には \verb|exit 0|、異常終了の時には 
+正常終了の時には \verb|exit 0|、異常終了の時には
 \verb|exit 1| (0以外を指定)とする場合が多い。
 
 \subsection{if 文}
@@ -1190,7 +1190,7 @@ done
 \vbindex{case} 文を使う方が便利なことが多い。
 \begin{screen}
 \begin{verbatim}
-case <変数> in 
+case <変数> in
         <値1>) 文1
                 ;;
         <値2>) 文2
@@ -1209,7 +1209,7 @@ esac
 (``\verb+|+''は OR を表す。)
 \begin{screen}
 \begin{verbatim}
-case "$1" in 
+case "$1" in
         *.tar.gz|*.tar.bz2) tar xzvf $1  ;;
         *.gz) gunzip $1 ;;
         *.bz2) bunzip2 $1 ;;
@@ -1303,9 +1303,14 @@ hoge@bcl.sci.yamaguchi-u.ac.jp        # 転送先のメールアドレス
 
 \chapter{エディタ(emacs)}
 
-プログラム等をつくるとき、UNIX上ではエディタとして \vbindex{emacs}
-等を使うことが多い。
-\verb|emacs|と同様の操作およびキー操作のエディタで軽いものに 
+\section{UNIX上で動くエディタ}
+プログラム等をつくるときに、UNIX上でよく使われるエディタに\vbindex{emacs}
+がある。
+最近はAtomやSublime Textなども人気がある。
+いろいろ試して気に入ったものを使うと良い。
+
+以下ではemacsの使い方を概説する。ちなみに，
+\verb|emacs|と同様の操作およびキー操作のエディタで軽いものに
 \vbindex{ng}, \vbindex{jed}などもある。
 \verb|emacs| はコンソール上ではオプション\verb|-nw|をつけて起動する。
 X Window 上で立ち上げるときにはオプションは不要。
@@ -1558,7 +1563,7 @@ http://localhost:631/
 $ lpr <ファイル名>
 \end{verbatim}
 \end{screen}
-または、 
+または、
 \begin{screen}
 \begin{verbatim}
 $ mpage -P -1 <ファイル名>
@@ -1584,8 +1589,8 @@ $ mpage -P -2 <ファイル名>
 例えば、プリンタ名が epson の時には以下のようになる。
 \begin{screen}
 \begin{verbatim}
-                $ lpq -Pepson
-                $ lprm -Pepson <ジョブ番号>
+$ lpq -Pepson
+$ lprm -Pepson <ジョブ番号>
 \end{verbatim}
 \end{screen}
 
@@ -1619,7 +1624,7 @@ $ dvips -f -p 2 -l 3 &lt;ファイル名.dvi> | lpr
 す。
 \begin{screen}
 \begin{verbatim}
-$ dvips -f <ファイル名.dvi> | mpage -P -2  
+$ dvips -f <ファイル名.dvi> | mpage -P -2
 \end{verbatim}
 \end{screen}
 
@@ -1628,8 +1633,8 @@ $ dvips -f <ファイル名.dvi> | mpage -P -2
 「あ、しまった、これは印刷するつもりじゃなかった！！！」という時には
 以下のようにします。
 \begin{enumerate}
-\item \vbindex{lpq} を実行すると、 現在印刷作業中の物件のジョブ番号 が表示される。 
-\item \vbindex{lprm} [ID番号] を実行する 
+\item \vbindex{lpq} を実行すると、 現在印刷作業中の物件のジョブ番号 が表示される。
+\item \vbindex{lprm} [ID番号] を実行する
 \end{enumerate}
 
 プリンタを指定する時には、-P オプションを使って、
@@ -1650,9 +1655,9 @@ CUPS(\ref{sec:cups}節)にアクセスして「ジョブの停止」をクリッ
 \verb|lprm|やCUPSで印刷中止が間にあわなかったときには、プリンターに走って
 以下を実行してください。
 \begin{enumerate}
-\item 紙をひっこぬく 
-\item プリンタの操作パネルで"オフライン"にする 
-\item プリンタを"リセット"する 
+\item 紙をひっこぬく
+\item プリンタの操作パネルで"オフライン"にする
+\item プリンタを"リセット"する
 \end{enumerate}
 
 
@@ -1787,13 +1792,13 @@ less-382-0vl4
 てくれる。
 パッケージ入手先を変更したいときは\vbindex{/etc/apt/sources.list}に登録する。
 \begin{enumerate}
-\item まず必ず行うおまじない: 
+\item まず必ず行うおまじない:
 すでにインストールされているパッケージ情報と、\verb|sources.list| に登
 録されているサイトにある最新パッケージ情報を入手する。
 \index{apt-get}
 \begin{screen}
 \begin{verbatim}
-  # apt-get update 
+  # apt-get update
 \end{verbatim}
 \end{screen}
 
@@ -1936,7 +1941,7 @@ apt-get を使えばこれらのパッケージを簡単にインストールで
 % Patch: acrobat5-INSTALL.patch
 % \end{verbatim}
 % \end{screen}
-% \item Acrobat-reader パッケージの作成をする 
+% \item Acrobat-reader パッケージの作成をする
 %   \begin{screen}
 % \begin{verbatim}
 % $ rpm -ba ~/rpm/SPECS/acrobat.spec
@@ -2071,7 +2076,7 @@ apt-get を使えばこれらのパッケージを簡単にインストールで
 %% $./MathInstaller
 %% Enter top Mathematica directory [/usr/local/mathematica]: (リターン押すだけ)
 %% Enter 'd' for default installation, 'c' for custom, 'h' for help [d]: (リターン押すだけ)
-%% Enter 's' to skip password installation, or 'c' to continue [c]: s 
+%% Enter 's' to skip password installation, or 'c' to continue [c]: s
 %% Enter directory for executable scripts [/usr/local/bin]: (リターン押すだけ)
 %% \end{verbatim}
 %% \end{screen}
@@ -2079,7 +2084,7 @@ apt-get を使えばこれらのパッケージを簡単にインストールで
 %% これでインストールは完了です。
 %% \begin{screen}
 %% \begin{verbatim}
-%% $ mathematica 
+%% $ mathematica
 %% \end{verbatim}
 %% \end{screen}
 
@@ -2131,7 +2136,7 @@ apt-get を使えばこれらのパッケージを簡単にインストールで
 %    Plotmtv \\
 %    starSuite/OpenOffice(SpreadSheet)\\
 %   \hline
-% \end{tabular}\qquad 
+% \end{tabular}\qquad
 % \begin{tabular}[t]{l}\hline
 % 絵を書く。ロゴをつくる。\\ \hline
 %    StarSuite/OpenOffice(Draw) \\
@@ -2151,7 +2156,7 @@ apt-get を使えばこれらのパッケージを簡単にインストールで
 %    gimp \\
 %    etc...\\
 %   \hline
-% \end{tabular}\qquad 
+% \end{tabular}\qquad
 % \begin{tabular}[t]{l}\hline
 % 電卓 \\ \hline
 %    xcalc \\
@@ -2162,116 +2167,109 @@ apt-get を使えばこれらのパッケージを簡単にインストールで
 % \end{center}
 
 
-\chapter{CVS(バージョン管理ツール)の使い方$^*$}
-
-\nmindex{CVS}は一つのアプリケーションを何人かで共同開発する場合に使う。
-基本的にはサーバに最新ファイル(レポジトリ)を格納しておき，
-作業開始にはそのファイルを入手，作業終了時にはサーバへの格納を行う。
-複数の人がほぼ同時にプログラム中の同じ場所の修正をした場合は不整合が生
-じれが，この場合はサーバへの格納時にどこに不整合が生じたかという情報
-が得られるので、修正も容易にできる。
-また，いつでも任意の過去の状態に戻すこともできる。
-
-
-\section{CVSを使うための設定}
-
-{\ttfamily \~{}/.bashrc}に以下の行を加える。
-\begin{screen}
-\begin{verbatim}
-export CVSROOT=/home/venus/cvs
-export CVSEDITOR="/usr/bin/ng"
-\end{verbatim}
-\end{screen}
-CVSROOTはレポジトリを格納するディレクトリを指定する。
-% この例は格納場所はローカルサーバ上ということになります．
-
-cvsサーバchaplin.orgにアカウントchaplinを持っておりssh接続
-でcvsサーバに接続して、そこのレポジトリを利用する場合には以下の様に
-設定する。
-\begin{screen}
-\begin{verbatim}
-export CVS_RSH='/usr/bin/ssh'
-export CVSROOT=':ext:charles@chaplin.org:/home/cvs'
-export CVSEDITOR="/usr/bin/ng"
-\end{verbatim}
-\end{screen}
-この例で、CVSEDITORに設定している ng はemacsと似た操作感の軽いエディタ。
-vi など他の軽いエディタでも良いが、emacs など重いエディタにはしないほ
-うが良い。
-上記設定をしたら、ログインし直すか、以下を実行して {\ttfamily \~{}/.bashrc}
-を読み込む。
-\begin{screen}
-\begin{verbatim}
-source ~/.bashrc
-\end{verbatim}
-\end{screen}
-
-\section{CVSの使いかた}
-mocaという名前のレポジトリのファイルをはじめて取り出すには、
-\begin{screen}
-\begin{verbatim}
-$ cvs checkout moca
-\end{verbatim}
-\end{screen}
-これで moca というディレクトリができて、mocaに登録されているファイルが
-入る。
-
-作業はmoca/以下でやって修正加えた時には、このmoca/以下で
-\begin{screen}
-\begin{verbatim}
-$ cvs commit
-\end{verbatim}
-\end{screen}
-この時、コメントを求められるので、修正点を書いてください。
-
-最新版に追随するには
-\begin{screen}
-\begin{verbatim}
-$ cvs update -d
-\end{verbatim}
-\end{screen}
-
-新しいファイルをつくったときには
-\begin{screen}
-\begin{verbatim}
-$ cvs add <file name>
-$ cvs commit
-\end{verbatim}
-\end{screen}
-
-ファイルの更新履歴を見るには
-\begin{screen}
-\begin{verbatim}
-$ cvs log
-\end{verbatim}
-\end{screen}
-
-手元のファイルが登録されているものと同じか知るには
-\begin{screen}
-\begin{verbatim}
-$ cvs status
-\end{verbatim}
-\end{screen}
-各ファイルについて {\ttfamily Status:Up-to-date}と表示されたら、手元のファ
-イルはCVSに登録されている最新版と同じということ。
-
-手元のファイルとcvsの登録されているものの違いを見るには
-\begin{screen}
-\begin{verbatim}
-$ cvs diff
-\end{verbatim}
-\end{screen}
-
-ファイルを古いものに戻すこともできる。
-詳しくはgoogleさんに聞いて下さい。
-% 以下も。
-% \begin{itemize}
-% \item 
-% \url{http://radiofly.to/nishi/cvs/}
-% \item 
-% \url{http://www.race.u-tokyo.ac.jp/users/moro/cvs/basics.html}
-% \end{itemize}
-
+% \chapter{CVS(バージョン管理ツール)の使い方$^*$}
+%
+% \nmindex{CVS}は一つのアプリケーションを何人かで共同開発する場合に使う。
+% 基本的にはサーバに最新ファイル(レポジトリ)を格納しておき，
+% 作業開始にはそのファイルを入手，作業終了時にはサーバへの格納を行う。
+% 複数の人がほぼ同時にプログラム中の同じ場所の修正をした場合は不整合が生
+% じれが，この場合はサーバへの格納時にどこに不整合が生じたかという情報
+% が得られるので、修正も容易にできる。
+% また，いつでも任意の過去の状態に戻すこともできる。
+%
+%
+% \section{CVSを使うための設定}
+%
+% {\ttfamily \~{}/.bashrc}に以下の行を加える。
+% \begin{screen}
+% \begin{verbatim}
+% export CVSROOT=/home/venus/cvs
+% export CVSEDITOR="/usr/bin/ng"
+% \end{verbatim}
+% \end{screen}
+% CVSROOTはレポジトリを格納するディレクトリを指定する。
+% % この例は格納場所はローカルサーバ上ということになります．
+%
+% cvsサーバchaplin.orgにアカウントchaplinを持っておりssh接続
+% でcvsサーバに接続して、そこのレポジトリを利用する場合には以下の様に
+% 設定する。
+% \begin{screen}
+% \begin{verbatim}
+% export CVS_RSH='/usr/bin/ssh'
+% export CVSROOT=':ext:charles@chaplin.org:/home/cvs'
+% export CVSEDITOR="/usr/bin/ng"
+% \end{verbatim}
+% \end{screen}
+% この例で、CVSEDITORに設定している ng はemacsと似た操作感の軽いエディタ。
+% vi など他の軽いエディタでも良いが、emacs など重いエディタにはしないほ
+% うが良い。
+% 上記設定をしたら、ログインし直すか、以下を実行して {\ttfamily \~{}/.bashrc}
+% を読み込む。
+% \begin{screen}
+% \begin{verbatim}
+% source ~/.bashrc
+% \end{verbatim}
+% \end{screen}
+%
+% \section{CVSの使いかた}
+% mocaという名前のレポジトリのファイルをはじめて取り出すには、
+% \begin{screen}
+% \begin{verbatim}
+% $ cvs checkout moca
+% \end{verbatim}
+% \end{screen}
+% これで moca というディレクトリができて、mocaに登録されているファイルが
+% 入る。
+%
+% 作業はmoca/以下でやって修正加えた時には、このmoca/以下で
+% \begin{screen}
+% \begin{verbatim}
+% $ cvs commit
+% \end{verbatim}
+% \end{screen}
+% この時、コメントを求められるので、修正点を書いてください。
+%
+% 最新版に追随するには
+% \begin{screen}
+% \begin{verbatim}
+% $ cvs update -d
+% \end{verbatim}
+% \end{screen}
+%
+% 新しいファイルをつくったときには
+% \begin{screen}
+% \begin{verbatim}
+% $ cvs add <file name>
+% $ cvs commit
+% \end{verbatim}
+% \end{screen}
+%
+% ファイルの更新履歴を見るには
+% \begin{screen}
+% \begin{verbatim}
+% $ cvs log
+% \end{verbatim}
+% \end{screen}
+%
+% 手元のファイルが登録されているものと同じか知るには
+% \begin{screen}
+% \begin{verbatim}
+% $ cvs status
+% \end{verbatim}
+% \end{screen}
+% 各ファイルについて {\ttfamily Status:Up-to-date}と表示されたら、手元のファ
+% イルはCVSに登録されている最新版と同じということ。
+%
+% 手元のファイルとcvsの登録されているものの違いを見るには
+% \begin{screen}
+% \begin{verbatim}
+% $ cvs diff
+% \end{verbatim}
+% \end{screen}
+%
+% ファイルを古いものに戻すこともできる。
+% 詳しくはgoogleさんに聞いて下さい。
+%
 
 
 \chapter{システム管理$^{**}$}
@@ -2306,21 +2304,21 @@ GUIベースの設定ツール\nmindex{webmin}も
 % #server 127.127.1.0     # local clock        <-- 頭に # を加える
 % #fudge  127.127.1.0 stratum 10               <-- 頭に # を加える
 
-% server  zeus.bcl.sci.yamaguchi-u.ac.jp    
+% server  zeus.bcl.sci.yamaguchi-u.ac.jp
 % \end{verbatim}
 % \item  {\ttfamily \# /sbin/chkconfig ntpd on}
 % \item  ちょっと今の時刻をみてみる
 % \begin{verbatim}
 % # date
 % \end{verbatim}
- 
+
 % \item  時刻あわせツールを起動
 % \begin{verbatim}
 % # /etc/rc.d/init.d/ntpd start
 % \end{verbatim}
- 
+
 % \item  もいちど時刻をみてみて、時刻の修正がされたか確認(もともとあまり
-% 時刻が違ってなければわかんないけど) 
+% 時刻が違ってなければわかんないけど)
 % \begin{verbatim}
 % # date
 % \end{verbatim}
@@ -2498,7 +2496,7 @@ LANに接続されている計算機には、世界中からのアクセスが�
 % きちんとファイアウォール等で守られたマシンでなければ、
 % \vbindex{/var/log/messages}等を見れば、その痕跡をきっと発見できるでしょう。
 パスワードが盗まれたりしなくても、怪しげなネットワーク資源やデータの置
-き場所にされたり、他のサイトを攻撃する中継地点にされてしまうこともある。 
+き場所にされたり、他のサイトを攻撃する中継地点にされてしまうこともある。
 
 ここでは、簡単にできるセキュリティ強化の基本を述べる。
 
@@ -2538,7 +2536,7 @@ webminも便利。
 % 行だけコメントをはずしましょう。なお、ftp サービスについては proftpd
 % を用いているなら proftpd の設定ファイル({\ttfamily /etc/proftpd.conf})で
 % アクセス制限を、httpd サービスについては apache の設定ファイル
-% ({\ttfamily /etc/httpd/conf/httpd.conf})で制限を行います。 
+% ({\ttfamily /etc/httpd/conf/httpd.conf})で制限を行います。
 
 % 設定をしたら、inet を再起動します。
 % \begin{screen}
@@ -2565,8 +2563,8 @@ webminも便利。
 % \begin{screen}
 % \begin{verbatim}
 % $ cat /etc/hosts.allow
-% sshd: 192.168.0.0/255.255.255.0 133.62.236.96/255.255.255.224 
-% ALL: 192.168.0.1 192.168.0.4 
+% sshd: 192.168.0.0/255.255.255.0 133.62.236.96/255.255.255.224
+% ALL: 192.168.0.1 192.168.0.4
 % \end{verbatim}
 % \end{screen}
 
@@ -2596,7 +2594,7 @@ webminも便利。
 
 \subsection{quota をかけるパーティションの設定}
 まず\vbindex{/etc/fstab}の編集をする。
-ユーザに対してquota をかけるパーティションには、オプションに 
+ユーザに対してquota をかけるパーティションには、オプションに
 {\ttfamily usrquota}を指定する。
 ユーザグループに quota をかけるときには{\ttfamily grpquota}を指定する。
 \begin{screen}
@@ -2725,7 +2723,7 @@ $ ./ypserv start
   \item ping が帰って来たら次に進む
   \end{enumerate}
 \item 研究室外の同じセグメントのマシン(192.168.0.xxx, xxx はIPアドレス
-  リストを見ていろいろためす)に ping をかける。 
+  リストを見ていろいろためす)に ping をかける。
   \begin{enumerate}
   \item ping が帰って来ないなら\textbf{対処方法リスト}
     \ref{item:netcheck}で、特にルートアドレスの設定を確認する。

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+OPT="-N -s --listing"
+TMPL=pandoc/platex.template
+
+echo "[md2tex]"
+
+[ -f $PTPL ] || echo "no $PTPL"
+
+while [ $# -lt 1 ]; do
+	echo $#
+	OPT="${OPT} ${1}"
+	shift
+done
+
+FILE=${1}
+OPT2="-f markdown-fancy_lists -t latex+lhs --template ${TMPL}  -o ${FILE%%.md}-md.tex"
+
+echo "pandoc ${FILE} ${OPT} ${OPT2}"
+pandoc ${FILE} ${OPT} ${OPT2}
