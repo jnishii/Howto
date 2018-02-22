@@ -1,3 +1,16 @@
+---
+title: GitHub入門
+author: 西井淳
+fontsize: 11pt
+papersize: a4paper
+twocolumn: false
+listing: true
+toc: false
+titlepage: false
+fancy: false
+geometry: width=15cm, height=22cm
+---
+
 # GitHubを使う
 
 Gitコマンド等の詳しい説明は西井のホームページに掲載している他，googleで検索したら色々出てくるので，ここにはごく基本的なことのみ紹介。必要に応じて自分で調べること。
@@ -48,18 +61,22 @@ $ git config --global core.editor vi      # コメント編集に使いたいエ
 
 ### リポジトリのダウンロード
 
-1. GitHubにあるリモートリポジトリ"bcl-group/bcl-texts"をhttps接続でダウンロードする。
+1. 以下のリポジトリのcloneをダウンロードしてみる
+  - bcl-group/Howto.git : 宿題のテキスト等がある
+  - bcl-group/bcl-admins.git : インストールマニュアルがある
+
 ```
-$ git clone https://github.com/bcl-group/bcl-texts.git
+git clone https://github.com/bcl-group/Howto.git
+git clone https://github.com/bcl-group/bcl-admins.git
 ```
-ダウンロードしたら中身を確認。Linuxのインストールマニュアル等がある。
+ダウンロードしたら中身を確認してみること。
 
 ### ダウンロードしてリポジトリに修正を加えてアップロード
 
 ダウンロードしたリポジトリ内のファイルをいじるときには，必ずGitサーバから最新バージョンをダウンロードしてから開始。
 
 ```
-$ git pull origin master  
+$ git pull origin master
 ```
 
 これはサーバ(origin)から，masterブランチ(ブランチは後述)をダウンロードするという意味。
@@ -68,7 +85,7 @@ $ git pull origin master
 ```
 $ git add .
 $ git commit -m “修正点を少し書く”    <=ローカルリポジトリ(手元)に登録
-$ git push origin master           <=リモートリポジトリに反映  
+$ git push origin master           <=リモートリポジトリに反映
 ```
 
 `git add`は，更新したファイルのうち，リモートリポジトリに反映したいファイルを指定(stagingとよぶ。これにより対象ファイルはstaging areaに移動)する。指定方法は以下のようにいろいろある。
