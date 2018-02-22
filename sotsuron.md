@@ -66,7 +66,7 @@ $ git pull origin master
 $ cd <リポジトリ名>
 $ git add .
 $ git commit -m "修正点についての説明を簡単に書く"
-$ git push orign master
+$ git push origin master
 ```
 
 ## Linuxの環境作り
