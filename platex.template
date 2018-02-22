@@ -57,16 +57,26 @@ $if(twocolumn)$\twocolumn[$endif$
 西井 淳
 \end{flushright}
 \rule{\linewidth}{0.3pt}
-{\small
-\begin{quote}
-\begin{screen}
-\tableofcontents
-\end{screen}\vspace{3mm}
-\end{quote}}
+  $if(toc)$
+  {\small
+  \begin{quote}
+%    \begin{screen} % screen does not work in lualatex
+      \hypersetup{linkcolor=black}
+      \setcounter{tocdepth}{$toc-depth$}
+      \tableofcontents
+%    \end{screen}\vspace{3mm}
+  \end{quote}}
+  %]
+  \rule{\linewidth}{0.3pt}
+  $endif$
 $if(twocolumn)$]$endif$
 
+$if(titlepage)$
 \newpage
+$endif$
+$if(fancy)$
 \pagestyle{fancy}
+$endif$
 $body$
 
 \end{document}

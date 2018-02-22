@@ -136,4 +136,3 @@ lam: lam.dvi lam.ps lam.pdf
 #	platex $*-md.tex
 #	dvipdfmx $*-md.dvi
 	mv $*-md.pdf $*.pdf
-
