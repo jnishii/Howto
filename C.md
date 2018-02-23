@@ -1,5 +1,5 @@
 ---
-title: Ｃ言語プログラミングの掟と小ネタ
+title: Ｃプログラミングの掟とメモ
 author: 西井 淳
 fontsize: 12pt
 papersize: a4paper
