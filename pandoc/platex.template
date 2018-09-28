@@ -46,6 +46,8 @@ stringstyle = \scshape\footnotesize,
 tabsize = 4,
 % lineskip = 0.1ex
 }
+\newcommand{\passthrough}[1]{#1}
+
 $endif$
 
 $if(twocolumn)$\twocolumn[$endif$
