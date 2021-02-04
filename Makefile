@@ -26,7 +26,7 @@ install:
 	dvipdfmx $<
 
 .md.pdf:
-	bin/md2tex $<
+	./bin/md2tex $<
 	${LATEXMK} $*-md.tex
 #	platex $*-md.tex
 #	platex $*-md.tex
