@@ -6,8 +6,8 @@ HTMLDIR=${HOME}/mnt/zeus/jun/public_html/custom/download/texts/
 paper.pdf: paper.md
 presen.pdf: presen.md
 C: C.dvi C.pdf C.html
-unix: unix.dvi unix.pdf unix.html
-unix-lesson: unix-lesson.dvi unix-lesson.pdf unix-lesson.html
+unix.pdf: unix.tex
+unix-lesson.pdf: unix-lesson.md
 
 clean:
 	rm -f *.aux *.log *.bbl *.blg *.toc *.dvi *~ *.fdb_latexmk *.fls *.synctex.gz *-md.tex

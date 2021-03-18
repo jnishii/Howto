@@ -1,0 +1,471 @@
+\documentclass[11pt, twocolumn, ]{jsarticle}
+\usepackage[hypertex]{hyperref}
+\usepackage[dvipdfmx]{color}
+\usepackage{listings,jlisting}
+\usepackage{amsmath}
+\usepackage{ascmac}
+\usepackage[width=15cm, height=20cm]{geometry}
+%\usepackage[height=24cm,width=16cm]{geometry}
+\usepackage{fancyhdr}
+
+\renewcommand{\labelenumi}{\arabic{enumi})}
+\renewcommand{\labelenumii}{\alph{enumii})}
+
+\providecommand{\tightlist}{%
+   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\begin{document}
+\renewcommand{\lstlistingname}{リスト}
+\lstset{language = c,
+numbers = left,
+numberstyle = {\footnotesize \emph},
+numbersep = 10pt,
+breaklines = true,
+breakindent = 40pt,
+frame = tlRB,
+frameround = ffft,
+framesep = 3pt,
+rulesep = 1pt,
+rulecolor = {\color{black}},
+rulesepcolor = {\color{black}},
+flexiblecolumns = false,
+keepspaces = true,
+basicstyle = \footnotesize,
+identifierstyle = \footnotesize,
+%commentstyle = \fontfamily{ptm}\selectfont\footnotesize,
+commentstyle = \selectfont\footnotesize,
+stringstyle = \scshape\footnotesize,
+tabsize = 4,
+% lineskip = 0.1ex
+}
+\newcommand{\passthrough}[1]{#1}
+
+
+\twocolumn[
+\noindent
+\rule{\linewidth}{0.3pt}
+\begin{center}
+  \textbf{\LARGE ＵＮＩＸ／ＬＩＮＵＸの基礎訓練}
+\end{center}
+\begin{flushright}
+\today 版\\
+西井 淳
+\end{flushright}
+\rule{\linewidth}{0.3pt}
+    {\small
+  \begin{quote}
+        \hypersetup{linkcolor=black}
+      \setcounter{tocdepth}{3}
+      \tableofcontents
+    \end{quote}}
+  %]
+          \rule{\linewidth}{0.3pt}
+      ]
+
+\hypertarget{ux30c7ux30b9ux30afux30c8ux30c3ux30d7ux74b0ux5883}{%
+\section{デスクトップ環境}\label{ux30c7ux30b9ux30afux30c8ux30c3ux30d7ux74b0ux5883}}
+
+\hypertarget{ux30b3ux30f3ux30bdux30fcux30ebux4e0aux3067}{%
+\subsection{コンソール上で}\label{ux30b3ux30f3ux30bdux30fcux30ebux4e0aux3067}}
+
+ログイン後X window を起動し(大抵自動で起動する)、以下を順に行え。
+
+\begin{enumerate}
+\item
+  コンソール画面に移動して(\textbf{X window は終了しないで}仮想
+  コンソールに移動)、ログインせよ。
+\item
+  'yes' とタイプせよ。これにより文字'y'が出力され続ける。
+  これを以下の3通りの方法で停止せよ。
+
+  \begin{itemize}
+  \item
+    C-c で停止してみよ。
+  \item
+    'yes' を再起動したあと、別の仮想コンソールに移り、コマンド'yes'
+    のプロセスID(PID)を ps と grep を用いて調べ、kill コマンドで yes
+    を停 止せよ。
+  \item
+    'yes' を再起動したあと、別の仮想コンソールに移り、コマンド'top'を
+    用いて'yes'を停止せよ。
+  \end{itemize}
+\item
+  C-s を押してみよ。この後、そのコンソールでは入出力ができな
+  くなるが、これを回復するにはどうしたらよいか?
+\item
+  yesがたくさん起動されているとき、yesコマンドの名前の指定によって
+  まとめてkillする方法は?
+\item
+  コンソールからログアウトせよ。
+\item
+  X window に復帰せよ。
+\end{enumerate}
+
+\hypertarget{unixux30b3ux30deux30f3ux30c9ux57faux672cux30a2ux30d7ux30eaux30b1ux30fcux30b7ux30e7ux30f3}{%
+\section{UNIXコマンド・基本アプリケーション}\label{unixux30b3ux30deux30f3ux30c9ux57faux672cux30a2ux30d7ux30eaux30b1ux30fcux30b7ux30e7ux30f3}}
+
+\hypertarget{ux30a8ux30c7ux30a3ux30bf}{%
+\subsection{エディタ}\label{ux30a8ux30c7ux30a3ux30bf}}
+
+プログラミングに利用するエディタで，以下のキーバインディング(ショートカットキー)を調べよ。
+
+\begin{enumerate}
+\tightlist
+\item
+  マウスカーソルを上下左右に動かす方法は?(矢印キー以外を使う)
+\item
+  編集画面(パネル)を分割表示する方法は? また、分割表示をやめる方法は?
+\item
+  分割した画面(パネル)間でカーソル移動する方法は?
+\item
+  編集画面を複数開く方法は?また，減らす方法は?
+\item
+  コピー＆ペーストをするキー操作は？
+\item
+  カット＆ペーストをするキー操作は？
+\item
+  読み込んだファイル中のある文字列を探すためのキー操作は(前方検索
+  /後方検索)? さらに同じ文字列がある次の場所を探す方法は?
+\item
+  ファイル中の特定の文字列を別の文字列に置換するためのキー操作は?
+\end{enumerate}
+
+\hypertarget{ux57faux672cux30b3ux30deux30f3ux30c9}{%
+\subsection{基本コマンド}\label{ux57faux672cux30b3ux30deux30f3ux30c9}}
+
+\begin{enumerate}
+\item
+  ターミナル(kterm等)上から emacs を起動するとき、ターミナルも emacs
+  も利用できるように起動するにはどうすればよいか?
+\item
+  前問の起動オプションを忘れて，うっかりターミナル(kterm等)上から emacs
+  を起動してしまった。その後emacsを終了すること無く，ターミナルも emacs
+  も利用できるようにする方法は?
+\item
+  あるプログラムと、それを少し修正したプログラムで、どこが違うかを知る方法は?
+\item
+  現在いるディレクトリがどこか、その絶対パスを知る方法は?
+\item
+  あるディレクトリにコマンド\passthrough{\lstinline!cd!}で移動後、もとのディレクトリ
+  戻るにはどうしたらいい?
+  (\passthrough{\lstinline!cd!}のオプションを利用する)
+\item
+  ディスク使用率を表示するコマンドは?
+\item
+  あるテキストファイルに含まれる文字数や行数を調べる方法は？
+\item
+  日本語のテキストファイルの文字コードを判断する方法は?
+\item
+  EUCのテキストファイルの文字コードをUTF-8に変換するには?
+\end{enumerate}
+
+\hypertarget{ux30deux30a6ux30b9ux64cdux4f5c}{%
+\subsection{マウス操作}\label{ux30deux30a6ux30b9ux64cdux4f5c}}
+
+\begin{enumerate}
+\item
+  マウスで1単語(文節)のみ選択する方法は?
+\item
+  マウスで選択した単語をペーストする方法は?
+\end{enumerate}
+
+\hypertarget{ux30d7ux30eaux30f3ux30bfux7ba1ux7406}{%
+\subsection{プリンタ管理}\label{ux30d7ux30eaux30f3ux30bfux7ba1ux7406}}
+
+\begin{enumerate}
+\item
+  プリンタの稼働状況を知るコマンドは?
+\item
+  プリンタジョブをキャンセルする方法は?
+\end{enumerate}
+
+\hypertarget{ux30d5ux30a1ux30a4ux30ebux60c5ux5831ux53d6ux5f97}{%
+\subsection{ファイル情報取得}\label{ux30d5ux30a1ux30a4ux30ebux60c5ux5831ux53d6ux5f97}}
+
+\begin{enumerate}
+\item
+  ファイルmath.hがシステム上のどこにあるか、その一覧を表示するコマンドは?
+\item
+  lsとタイプしたとき実行されるコマンドがどこのパスにあるかを知るためのコマンドは?
+\end{enumerate}
+
+\hypertarget{ux30a8ux30a4ux30eaux30a2ux30b9}{%
+\subsection{エイリアス}\label{ux30a8ux30a4ux30eaux30a2ux30b9}}
+
+\begin{enumerate}
+\item
+  em とタイプすると emacs が起動するようにエイリアスをつくれ。
+\item
+  一時的にエイリアスを無効にしてemという名前のコマンドを実行する方
+  法は？
+\item
+  現在 em がどのようなエイリアスになっているかを確認する方法は？
+\item
+  作成したエイリアスemが不要ならば削除せよ。
+\end{enumerate}
+
+\hypertarget{ux30b7ux30f3ux30dcux30eaux30c3ux30afux30eaux30f3ux30af}{%
+\subsection{シンボリックリンク}\label{ux30b7ux30f3ux30dcux30eaux30c3ux30afux30eaux30f3ux30af}}
+
+\begin{enumerate}
+\item
+  ディレクトリ \passthrough{\lstinline!\~/c!} と
+  \passthrough{\lstinline!\~/tmp!} をつくりなさい。
+\item
+  ディレクトリ\passthrough{\lstinline!\~/tmp!} に移動せよ。
+\item
+  ディレクトリ\passthrough{\lstinline!\~/c!}へのシンボリックリンクをつくれ。
+\item
+  \passthrough{\lstinline!ls c!}で、\passthrough{\lstinline!\~/c!}以下を参照できることを確かめよ。
+\item
+  \passthrough{\lstinline!cd c!}でシンボリックリンクの中へ移動できることを確かめよ。
+\item
+  さらに、\passthrough{\lstinline!cd ../!}
+  でもとのディレクトリ(\passthrough{\lstinline!\~/tmp!})に戻れること
+  を確かめよ。
+\item
+  \passthrough{\lstinline!\~/tmp/c!}
+  を削除せよ。この時\passthrough{\lstinline!\~/c!}は無くならないことを確認せよ。
+\item
+  最後に、ディレクトリ\passthrough{\lstinline!\~/tmp!}と\passthrough{\lstinline!\~/c!}を(不要なら)削除せよ。
+\end{enumerate}
+
+\hypertarget{ux30eaux30c0ux30a4ux30ecux30afux30c8ux30d1ux30a4ux30d7}{%
+\subsection{リダイレクト・パイプ}\label{ux30eaux30c0ux30a4ux30ecux30afux30c8ux30d1ux30a4ux30d7}}
+
+以下をそれぞれ\textbf{コマンド行一行で解決する方法}を考えよ。
+
+\begin{enumerate}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  \passthrough{\lstinline!ls -lR!}の出力をファイル\passthrough{\lstinline!ls-lR!}に書き込むにはどうしたらよいか?
+\item
+  ファイル math.h から、文字列 PI を含む行を全て抜き出すにはどうし
+  たら良い?
+\item
+  あるファイルの、末尾から50行のみを less を使って見るにはどうしたらよ
+  いか?
+\item
+  あるファイルの、先頭から50行のみを less を使って見るにはどうしたらよ
+  いか?
+\item
+  CSV形式のファイルの2列目のみを抜き出して表示するにはどうすればよいか?
+  (\passthrough{\lstinline!$ man cut!}参照)
+  CSV形式とは以下の例のように、各行にデータを'',''で区切って保存するデー
+  タ形式である。
+\end{enumerate}
+
+\begin{lstlisting}
+データx1, データy1, データz1
+データx2, データy2, データz2
+\end{lstlisting}
+
+\begin{enumerate}
+\setcounter{enumi}{7}
+\tightlist
+\item
+  以下のように2つのデータファイル(data1.txt,data2.txt)があるとする。
+\end{enumerate}
+
+\begin{lstlisting}
+$ cat data1.txt
+1
+2
+3
+$ cat data2.txt
+10
+15
+20
+\end{lstlisting}
+
+\begin{lstlisting}
+これらの2つのデータファイルの各行をくっつけて以下のようなファイル
+(data3.txt)を出力する方法は? (\$ man paste 参照)
+\end{lstlisting}
+
+\begin{lstlisting}
+$ cat data3.txt
+1 10
+2 15
+3 20
+\end{lstlisting}
+
+\hypertarget{ux6587ux5b57ux5217ux7f6eux63db}{%
+\subsection{文字列置換}\label{ux6587ux5b57ux5217ux7f6eux63db}}
+
+ストリームエディタsedを使うと、文字列の置換を簡単にできる。
+あるファイル中の文字列1を文字列2に置換した内容を出力したいときには以下
+を実行する。
+
+\begin{lstlisting}
+$ sed -e "s/文字列1/文字列2/g" <ファイル名>
+\end{lstlisting}
+
+上記命令のgを省いたときには，各行で一番はじめにあった文字列1のみが文字
+列2に置換される。
+
+\begin{enumerate}
+\item
+  あるファイルの空白(スペース)を\textbf{すべて}削除する方法は?
+\item
+  あるファイルの連続した5つの空白(スペース)をタブに置換して、その
+  結果をファイルに保存する方法は?
+\item
+  あるファイルの各行のはじめにある空白(スペース)およびタブを
+  \textbf{すべて}削除する方法は?
+\end{enumerate}
+
+\hypertarget{aptux30b3ux30deux30f3ux30c9ubuntu-linuxux7b49ux3067ux306eux30b3ux30deux30f3ux30c9}{%
+\section{aptコマンド(Ubuntu
+Linux等でのコマンド)}\label{aptux30b3ux30deux30f3ux30c9ubuntu-linuxux7b49ux3067ux306eux30b3ux30deux30f3ux30c9}}
+
+\begin{enumerate}
+\tightlist
+\item
+  インストールされているパッケージの一覧を表示するaptコマンドは?
+\item
+  インストールされているパッケージを最新状態にするaptコマンドは?
+\item
+  あるパッケージをインストールするaptコマンドは?
+\end{enumerate}
+
+\hypertarget{ux30b7ux30a7ux30ebux30b9ux30afux30eaux30d7ux30c8ux3068ux30d1ux30b9ux8a2dux5b9a}{%
+\section{シェルスクリプトとパス設定}\label{ux30b7ux30a7ux30ebux30b9ux30afux30eaux30d7ux30c8ux3068ux30d1ux30b9ux8a2dux5b9a}}
+
+\hypertarget{ux6e96ux5099ux904bux52d5}{%
+\subsection{準備運動}\label{ux6e96ux5099ux904bux52d5}}
+
+\begin{enumerate}
+\item
+  引数の数、第0引数、第1引数、全ての引数をそれぞれ表示する
+  シェルスクリプト arg.sh を作って
+  \passthrough{\lstinline!arg.sh "a b" 3 a b!} の出力が
+  どうなるか確認せよ。
+\item
+  arg.shをディレクトリ\passthrough{\lstinline!\~/bin!}に置き、どこのディレクトリにいて
+  も 'arg.sh'を実行できるよう、パスの設定をせよ。
+\end{enumerate}
+
+\hypertarget{ux30d5ux30a1ux30a4ux30ebux5727ux7e2e}{%
+\subsection{ファイル圧縮}\label{ux30d5ux30a1ux30a4ux30ebux5727ux7e2e}}
+
+\begin{enumerate}
+\item
+  指定ディレクトリを圧縮したtar.bz2ファイルをつくるシェルスクリプト
+  \passthrough{\lstinline!bzdir!}をつくりなさい。
+  すなわち\passthrough{\lstinline!$ bzdir <directory name>!}を実行すれば、
+  \passthrough{\lstinline!<directory name>.tar.bz2!}が出来るスクリプトをつくりなさい。
+  ただし、以下の仕様を満たすようにすること。
+
+  \begin{enumerate}
+  \item
+    作成したプログラムの使用方法を表示してプログラムを終了する関数
+    Usageを作成し、引数の数が1個でない時には、その関数Usageを呼び出す
+    こと。
+  \item
+    引数で与えた名前のディレクトリが存在しないときには、エラーメッセー
+    ジを表示して終了
+  \item
+    システムにあらかじめ用意されているコマンドbzip2dirは用いずに、
+    tarを用いて実現すること。
+  \end{enumerate}
+\item
+  カレント・ディレクトリにあるディレクトリをそれぞれ圧縮するシェル
+  スクリプト bzdir2
+  をつくりなさい。(\passthrough{\lstinline!c/!},\passthrough{\lstinline!tex/!}というディレクトリが
+  あれば、\passthrough{\lstinline!c.tar.bz2!},\passthrough{\lstinline!tex.tar.bz2!}をつくる。)
+\item
+  引数に \passthrough{\lstinline!<name>.tar.gz!}といった
+  \passthrough{\lstinline!tar.gz!}で終る名前を与え
+  たときに、\passthrough{\lstinline!<name>.tar.bz2!}という名前を表示するシェルスクリプトを
+  つくりなさい。
+\item
+  現在いるディレクトリにgzipで圧縮されたファイル(*.gz)があれば、 bzip2
+  で圧縮したファイルに変換するスクリプトgz2bz2 をつくりなさい。
+  変換前と変換後のファイルサイズも表示するようにしなさい。
+\end{enumerate}
+
+\hypertarget{ux30eaux30e2ux30fcux30c8ux64cdux4f5c}{%
+\section{リモート操作}\label{ux30eaux30e2ux30fcux30c8ux64cdux4f5c}}
+
+リモート接続可能な計算機 venus があるとして，以下の課題をしなさい。
+
+\hypertarget{ux4ed6ux30dbux30b9ux30c8ux3078ux306eux63a5ux7d9a}{%
+\subsection{他ホストへの接続}\label{ux4ed6ux30dbux30b9ux30c8ux3078ux306eux63a5ux7d9a}}
+
+\begin{enumerate}
+\item
+  venusにsshでログインするスクリプト\passthrough{\lstinline!connect!}を
+  作りなさい。
+\item
+  \passthrough{\lstinline!connect!}を\passthrough{\lstinline!\~/bin!}に置いて，以下のような名前のシンボリッ
+  クリンクを\passthrough{\lstinline!\~/bin!}内につくりなさい。
+
+\begin{lstlisting}
+  venus -> connect
+  atlas  -> connect
+\end{lstlisting}
+\item
+  \passthrough{\lstinline!venus!}とコマンドを打てばvenusに接続し，\passthrough{\lstinline!atlas!}と打て
+  ばatlasに接続するように、スクリプト\passthrough{\lstinline!connect!}を修正しなさい。
+\end{enumerate}
+
+\hypertarget{ux30eaux30e2ux30fcux30c8ux30b3ux30d4ux30fc}{%
+\subsection{リモートコピー}\label{ux30eaux30e2ux30fcux30c8ux30b3ux30d4ux30fc}}
+
+\begin{enumerate}
+\item
+  自分のノートパソコンにあるCのプログラム(hoge.cとする)を, venus
+  上の自分のホームに転送する方法は?
+\item
+  venus
+  にあるファイル\passthrough{\lstinline!hoge2.c!}をvenusから自分のマシンに転送する方法は?
+\end{enumerate}
+
+\hypertarget{ux30a2ux30afux30bbux30b9ux6a29ux9650}{%
+\subsection{アクセス権限}\label{ux30a2ux30afux30bbux30b9ux6a29ux9650}}
+
+研究室ではNFSサーバvenusに共用ディレクトリ
+\passthrough{\lstinline!/home/public/!}がある。
+
+\begin{enumerate}
+\item
+  研究室のマシンにログインしなさい。
+\item
+  \passthrough{\lstinline!/home/public/tmp!}以下に自分の名前のディレクトリ(仮に
+  \passthrough{\lstinline!pochi!}とする)を作りなさい。
+\item
+  \passthrough{\lstinline!/home/public/tmp/pochi!}にアクセス権限を持つヒトは誰かを確
+  認する方法を述べなさい。
+  また、このディレクトリの中のファイル一覧を参照できる権限を持つヒト、
+  中のファイル削除や名前変更等ができる権限を持つヒト、中にcd
+  できる権限を持つヒトがそれぞれどのようなヒトか述べなさい。
+\item
+  \passthrough{\lstinline!/home/public/tmp/pochi!}に自分の作ったプログラム(dog.cとす
+  る)をなにか置いて、それに対して読み込み権限を持つヒト、書き換えや
+  削除権限を持つヒトはそれぞれどのようなヒトか述べなさい。
+\item
+  自分と同じグループに属するヒトが
+  \passthrough{\lstinline!/home/public/tmp/pochi/dog.c!}を読み書きできるようにパーミションの
+  設定をしなさい。
+\end{enumerate}
+
+\hypertarget{ux3053ux306eux30c9ux30adux30e5ux30e1ux30f3ux30c8ux306eux8457ux4f5cux6a29ux306bux3064ux3044ux3066}{%
+\section{このドキュメントの著作権について}\label{ux3053ux306eux30c9ux30adux30e5ux30e1ux30f3ux30c8ux306eux8457ux4f5cux6a29ux306bux3064ux3044ux3066}}
+
+\begin{enumerate}
+\item
+  本稿の著作権は西井淳\url{nishii@sci.yamaguchi-u.ac.jp}が有します。
+\item
+  非商用目的での複製は許可しますが、修正を加えた場合は必ず修正点および加筆者の
+  氏名・連絡先、修正した日付を明記してください。また本著作権表示の削除は行っ
+  てはいけません。
+\item
+  本稿に含まれている間違い等によりなんらかの被害を被ったとしても著者は一切
+  責任を負いません。
+\end{enumerate}
+
+間違い等の連絡や加筆修正要望等の連絡は大歓迎です。
+
+\end{document}

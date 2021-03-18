@@ -1664,25 +1664,28 @@ CUPS(\ref{sec:cups}節)にアクセスして「ジョブの停止」をクリッ
 \chapter{ソフトウェアのインストール方法(rpm/apt)}
 
 
-\section{rpm パッケージのインストールをしたい(rpm/apt コマンドの使いかた)}
+\section{rpm パッケージのインストールをしたい(rpm コマンドの使いかた)}
 
-いろいろなアプリケーションが \vbindex{rpm} 形式と呼ばれる\nmindex{パッ
-  ケージ}形式で配布されており、
-インストール・アップグレード・削除を行える。
-\verb|rpm|や\verb|apt|の利用方法は以下に簡単に説明するが，
-詳細についてはVine Linuxオンラインマニュアル
-(\url{file:/usr/share/doc/Vine/index.html})
-を見るとよい。
+
+Ubuntu系Linux (Ubuntu/Mint等)では，アプリケーションが \vbindex{deb} 形式と呼ばれる\nmindex{パッケージ}形式で配布されている。
+パッケージ管理(ダウンロードやインストール，削除など)には\vbindex{apt}コマンドを使う。
+
+RedHat系Linux (CentOS/Fedora/Vine等)では，
+deb形式ではなく \vbindex{rpm}で配布されており，
+パッケージ管理にはCentOSやFedoraでは\vbindex{yum}を，
+Vine Linuxでは\vbindex{apt}を使う。
+
+以下では，\verb|rpm|や\verb|apt|の利用方法は以下に簡単に説明する。
 
 \verb|rpm|コマンドはダウンロードした個々の\verb|rpm|パッケージのインス
 トールや削除に、\vbindex{apt-get}コマンドはパッケージのダウンロードか
 らインストールまでをまとめて実行するのに使う。
 
 \section{rpm を利用したパッケージ管理}
-例えば，\verb|skype-0.93.0.3-fc2.i386.rpm|というパッケージを入手したとします。
+例えば，\verb|skype-0.93.0.3-fc2.i386.rpm|というパッケージを入手したとする。
 このファイル名のうちskypeはパッケージ名、0.93.0.3は
 バージョン番号(ソフトウェアのバージョン)、fc3がリリース番号(rpmパッケー
-ジのバージョン)を指します。
+ジのバージョン)を指す。
 \begin{itemize}
 \item {rpmパッケージに関する情報をみる}
 \begin{screen}
