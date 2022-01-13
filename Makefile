@@ -17,7 +17,7 @@ all: paper presen math-lesson C unix unix-lesson install
 .SUFFIXES: .tex .pdf
 
 install:
-	install unix.pdf unix-lesson.pdf C.pdf C-lesson.pdf ${HTMLDIR}
+	install paper.pdf presen.pdf unix.pdf unix-lesson.pdf C.pdf C-lesson.pdf ${HTMLDIR}
 
 .tex.pdf:
 	platex $<
