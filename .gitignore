@@ -1,4 +1,5 @@
 .texpadtmp
+*-md.*
 *.aux
 *.bbl
 *.bcf
