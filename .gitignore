@@ -19,3 +19,4 @@
 *.toc
 *~
 .DS_Store
+out/

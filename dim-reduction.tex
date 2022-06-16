@@ -1,0 +1,116 @@
+\documentclass[a4paper,11pt]{jsarticle}
+
+\usepackage{amsmath,amsfonts}
+\usepackage{bm}
+\usepackage[dvipdfmx]{graphicx}
+
+\begin{document}
+
+\title{時系列信号の次元圧縮}
+\author{西井淳}
+\date{\today}
+\maketitle
+
+\section{目的}
+取得した$N$次元信号の時系列$\bm{e}(t)=(e_1(t),e_2(t),\ldots,e_N(t))^t$を$M(\le N)$個の基底$\{\bm{p}_1,\bm{p}_2,\ldots,\bm{p}_M\}$, $\bm{p}_i=(p_{i1},p_{i2},\ldots, p_{iN})^t$, $(i=1,2,\ldots,M)$で表す。このとき，新しい基底の次元数$M$が元データの次元$M$より小さければ($N>M$)，もとの信号をよく表現できるならば，次元圧縮が可能になる。
+
+\begin{align}
+\begin{pmatrix}
+  e_1(t) \\
+  e_2(t) \\
+  \vdots\\
+  e_N(t)
+\end{pmatrix}
+&=
+c_1(t)
+\begin{pmatrix}
+p_{11}\\
+p_{12}\\
+\vdots\\
+p_{1N}
+\end{pmatrix}
++
+c_2(t)
+\begin{pmatrix}
+p_{21}\\
+p_{22}\\
+\vdots\\
+p_{2N}
+\end{pmatrix}
++ \cdots
+\end{align}
+\begin{align}
+  \bm{e}(t)&=c_1(t)\bm{p}_1+c_2(t)\bm{p}_2+\cdots\\
+  &=(\bm{p}_1,\bm{p}_2,\ldots)\bm{c}(t)
+\end{align}
+ここで，$\bm{c}(t)=(c_1(t),c_2(t),\ldots)^t$であり，
+$c_i(t)$は基底$\{\bm{p}_i\}$を座標軸とする空間で$\bm{e}(t)$を表した場合の座標値を表す。
+各基底ベクトルは単位ベクトル($||\bm{p}_i||=1$)になるようにとる。
+
+主成分分析では，この基底ベクトル$\bm{p}_i$が主成分軸を表す。また，基底ベクトルの要素$p_{ij}$を主成分負荷量，係数$c_i$を第$i$主成分得点とよぶ。
+因子分析では$p_{ij}$を因子負荷量，$c_i$を第$i$共通因子とよぶ。
+$E=(\bm{e}(t_1),\bm{e}(t_2),\ldots)$, $P=(\bm{p}_1,\bm{p}_2,\ldots)$, $C=(\bm{c}(t_1),\bm{c}(t_2),\ldots)$とおくと，以下のように書くことができる。
+
+\begin{align}
+  \begin{pmatrix}
+    e_1(t_1) & e_1(t_2) &\cdots\\
+    e_2(t_1) & e_2(t_2) & \cdots\\
+    \vdots& \vdots&\\
+    e_N(t_1)& e_N(t_2) & \cdots\\
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+  p_{11} &p_{21}& \cdots\\
+  p_{12} &p_{22}& \cdots\\
+  \vdots &\vdots&\\
+  p_{1N} &p_{2N}& \cdots\\
+  \end{pmatrix}
+  \begin{pmatrix}
+    c_1(t_1) & c_1(t_2) & \cdots\\
+    c_2(t_1) & c_2(t_2) & \cdots\\
+    \vdots & \vdots& \\
+    c_N(t_1) & c_1(t_2) & \cdots\\
+    \end{pmatrix}
+  \end{align}
+  \begin{align}
+   %(\bm{e}(t_1),\bm{e}(t_2),\ldots)&=(\bm{p}_1,\bm{p}_2,\ldots)(\bm{c}(t_1),\bm{c}(t_2),\ldots)\\
+    E&=PC
+  \end{align}
+
+\section{主成分分析(Principle Component Analysis, PCA)}
+
+主成分分析は変数の分布をよく表現する座標系を取り直すために用いられる手法。
+
+\begin{itemize}
+\item 原点をデータ点の平均ベクトルにとる
+\item 元データを射影した点の分散が大きくなる順に座標軸(主成分)を選択
+\item 直交基底
+\item 得られる座標軸は元データの次元と同じ。その中から累積寄与率に基づいて選択
+\end{itemize}
+
+\section{因子分析(Factor Analysis, FA)}
+
+因子分析は，変数間の相関関係をその背後に隠れた因子によって説明するための手法。
+
+\begin{itemize}
+  \item 原点をデータ点の平均ベクトルにとる。
+  \item 基底の数は分析時に指定
+  \item 基底の選び方はいろいろある
+  \begin{itemize}
+    \item 主因子法: 因子寄与が大きなものから順($N=M$の場合の結果は主成分主成分の結果と一致)
+    \item 最尤法: 尤度が最大になる順(元データが正規分布であると)
+    \item 最小自乗: 残差を小さくする順
+    \item etc
+  \end{itemize}
+    \item 直交基底になるとは限らない
+    \end{itemize}
+  
+\section{非負値行列因子分解(Nonnegative Matrix Factorization, NMF)}
+
+\begin{itemize}
+  \item 因子分析の一種
+  \item 基底の要素および係数が正になるように座標軸を決定
+  \item 残差を表現するVariance Accounted For (VAF)によって因子数を決定することが多い。おく
+\end{itemize}
+
+\end{document}
