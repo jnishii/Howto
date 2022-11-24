@@ -1256,39 +1256,39 @@ exit 0
 %   川村正樹「BASH入門」秀和システム
 % \end{quote}
 
-\chapter{メールを読む}
-\section{メーラ}
-Linuxで使えるメーラとしては
-\vbindex{Thunderbird}(Firefoxの兄弟ソフト)が人気がある。
-MS Windows, Mac OS Xでも利用できるのでお薦め。
+% \chapter{メールを読む}
+% \section{メーラ}
+% Linuxで使えるメーラとしては
+% \vbindex{Thunderbird}(Firefoxの兄弟ソフト)が人気がある。
+% MS Windows, Mac OS Xでも利用できるのでお薦め。
 
-\section{メールの転送について\label{sec:forward}}
+% \section{メールの転送について\label{sec:forward}}
 
-何カ所かにメールアドレスを持ってるとき，メールを一ヶ所にまとめて見れる
-ようにすると便利である。
-大抵のプロバイダではメールの転送設定を受け付けている。
-また，メールサーバがUNIX/Linux環境で管理されてる場合は以下のように設定すれば
-\bfindex[めーるのてんそう]{メールの転送}をできる。
-\begin{enumerate}
-% \item fetchmailconf で複数のメールサーバからメールを受け取るように設定す
-%   る (\ref{sec:fetch}節参照)。
-\item メールサーバのホームに \verb|~/.forward|\index{.forward}と
-  いうファイルをつくって、中に転送先を書いておく。
-\begin{verbatim}
-$cat ~/.forward
-hoge@bcl.sci.yamaguchi-u.ac.jp        # 転送先のメールアドレス
-\end{verbatim}
-上記のような\verb|./forward|を用意した場合，受け取ったメールはもれなく
-\verb|hoge@bcl.sci.yamaguchi-u.ac.jp|に転送される．
-\item メールサーバにもメールを残しておきたい
-  ときには、\verb|~/.forward|に、マシンA用のアカウント名も書いておく。
-\begin{verbatim}
-$cat ~/.forward
-userA                                 # マシンAのアカウント名
-hoge@bcl.sci.yamaguchi-u.ac.jp        # 転送先のメールアドレス
-\end{verbatim}
+% 何カ所かにメールアドレスを持ってるとき，メールを一ヶ所にまとめて見れる
+% ようにすると便利である。
+% 大抵のプロバイダではメールの転送設定を受け付けている。
+% また，メールサーバがUNIX/Linux環境で管理されてる場合は以下のように設定すれば
+% \bfindex[めーるのてんそう]{メールの転送}をできる。
+% \begin{enumerate}
+% % \item fetchmailconf で複数のメールサーバからメールを受け取るように設定す
+% %   る (\ref{sec:fetch}節参照)。
+% \item メールサーバのホームに \verb|~/.forward|\index{.forward}と
+%   いうファイルをつくって、中に転送先を書いておく。
+% \begin{verbatim}
+% $cat ~/.forward
+% hoge@bcl.sci.yamaguchi-u.ac.jp        # 転送先のメールアドレス
+% \end{verbatim}
+% 上記のような\verb|./forward|を用意した場合，受け取ったメールはもれなく
+% \verb|hoge@bcl.sci.yamaguchi-u.ac.jp|に転送される．
+% \item メールサーバにもメールを残しておきたい
+%   ときには、\verb|~/.forward|に、マシンA用のアカウント名も書いておく。
+% \begin{verbatim}
+% $cat ~/.forward
+% userA                                 # マシンAのアカウント名
+% hoge@bcl.sci.yamaguchi-u.ac.jp        # 転送先のメールアドレス
+% \end{verbatim}
 
-\end{enumerate}
+% \end{enumerate}
 
 
 % \section{メールの確認}
@@ -1304,9 +1304,9 @@ hoge@bcl.sci.yamaguchi-u.ac.jp        # 転送先のメールアドレス
 \chapter{エディタ(emacs)}
 
 \section{UNIX上で動くエディタ}
-プログラム等をつくるときに、UNIX上でよく使われるエディタに\vbindex{emacs}
+プログラム等をつくるときに、UNIX上でよく使われてきたエディタに\vbindex{emacs}
 がある。
-最近はAtomやSublime Textなども人気がある。
+最近はVS CodeやSublime Textなども人気がある。
 いろいろ試して気に入ったものを使うと良い。
 
 以下ではemacsの使い方を概説する。ちなみに，
@@ -1539,147 +1539,256 @@ C-c @ C-e  & 広げる(マウスポインタのあるセクションのみ)\\
 \end{tabular}
 \end{quote}
 
-\chapter{プリントアウト}
+% \chapter{プリントアウト}
 
-\section{プリンタ管理CUPS\label{sec:cups}}
+% \section{プリンタ管理CUPS\label{sec:cups}}
 
-Vine LinuxやMac OS Xではプリンタ管理システムとして
-\bfindex{CUPS}(Common UNIX Printing System)が使われている。
-以下にアクセスすると、プリンタの登録、プリントジョブのモニター等を行うことが
-できる。
-\begin{quote}
-\begin{verbatim}
-http://localhost:631/
-\end{verbatim}
-\end{quote}
+% Vine LinuxやMac OS Xではプリンタ管理システムとして
+% \bfindex{CUPS}(Common UNIX Printing System)が使われている。
+% 以下にアクセスすると、プリンタの登録、プリントジョブのモニター等を行うことが
+% できる。
+% \begin{quote}
+% \begin{verbatim}
+% http://localhost:631/
+% \end{verbatim}
+% \end{quote}
 
-\section{プリントアウトの基本}
+% \section{プリントアウトの基本}
 
-テキストファイルやPSファイル(拡張子が\verb|ps|のファイル)を\nmindex{プ
-  リントアウト}するには、
-\vbindex{lpr} コマンドや\vbindex{mpage} コマンドを使う。
-\begin{screen}
-\begin{verbatim}
-$ lpr <ファイル名>
-\end{verbatim}
-\end{screen}
-または、
-\begin{screen}
-\begin{verbatim}
-$ mpage -P -1 <ファイル名>
-\end{verbatim}
-\end{screen}
-
-
-テキストファイルやPSファイルの ２ページを紙１枚にまとめて印刷するには、
-\begin{screen}
-\begin{verbatim}
-$ mpage -P -2 <ファイル名>
-\end{verbatim}
-\end{screen}
-同様に -4, -8 というオプションもある。 mpage には他にも、いろいろ
-な機能があるので、man mpage で参照すること。
-\verb|mpage| のほかに \vbindex{a2ps} もよく使われる。
-
-\section{プリンタの切替え}
-
-複数のプリンタを利用している環境で、出力するプリンタを切替えたい場合に
-は、
-プリンタを指定する時には、オプションで{\ttfamily -P{$<$}プリンタ名{$>$}}と指定します。
-例えば、プリンタ名が epson の時には以下のようになる。
-\begin{screen}
-\begin{verbatim}
-$ lpq -Pepson
-$ lprm -Pepson <ジョブ番号>
-\end{verbatim}
-\end{screen}
-
-とします。mpage や lpr コマンドでも同様にしてプリンタを指定できる。
+% テキストファイルやPSファイル(拡張子が\verb|ps|のファイル)を\nmindex{プ
+%   リントアウト}するには、
+% \vbindex{lpr} コマンドや\vbindex{mpage} コマンドを使う。
+% \begin{screen}
+% \begin{verbatim}
+% $ lpr <ファイル名>
+% \end{verbatim}
+% \end{screen}
+% または、
+% \begin{screen}
+% \begin{verbatim}
+% $ mpage -P -1 <ファイル名>
+% \end{verbatim}
+% \end{screen}
 
 
+% テキストファイルやPSファイルの ２ページを紙１枚にまとめて印刷するには、
+% \begin{screen}
+% \begin{verbatim}
+% $ mpage -P -2 <ファイル名>
+% \end{verbatim}
+% \end{screen}
+% 同様に -4, -8 というオプションもある。 mpage には他にも、いろいろ
+% な機能があるので、man mpage で参照すること。
+% \verb|mpage| のほかに \vbindex{a2ps} もよく使われる。
 
-\section{\TeX ファイルの印刷$^*$}
+% \section{プリンタの切替え}
 
-\TeX を印刷するには\vbindex{dvips}コマンドで\vbindex{dvi} ファイルに変換
-してから\verb|lpr|コマンドを使って印刷します。
-\begin{screen}
-\begin{verbatim}
-$ dvips -f <ファイル名.dvi> | lpr
-\end{verbatim}
-\end{screen}
-\verb|-f|は出力を標準出力にするためのオプションです。
-上の例では出力をlprへパイプしています。
+% 複数のプリンタを利用している環境で、出力するプリンタを切替えたい場合に
+% は、
+% プリンタを指定する時には、オプションで{\ttfamily -P{$<$}プリンタ名{$>$}}と指定します。
+% 例えば、プリンタ名が epson の時には以下のようになる。
+% \begin{screen}
+% \begin{verbatim}
+% $ lpq -Pepson
+% $ lprm -Pepson <ジョブ番号>
+% \end{verbatim}
+% \end{screen}
 
-dvi ファイルの 2ページ目から3ページ目を印刷する時には次のようにします。
-\begin{screen}
-\begin{verbatim}
-$ dvips -f -p 2 -l 3 &lt;ファイル名.dvi> | lpr
-\end{verbatim}
-\end{screen}
-
-つまり、\verb|-p|は最初のページの指定、\verb|-l|は最後のページの指定
-をするためのオプションです。
-
-以下のようにすれば、TeXファイルの２ページを紙１枚にまとめて印刷できま
-す。
-\begin{screen}
-\begin{verbatim}
-$ dvips -f <ファイル名.dvi> | mpage -P -2
-\end{verbatim}
-\end{screen}
-
-\section{プリントアウトの中止}
-
-「あ、しまった、これは印刷するつもりじゃなかった！！！」という時には
-以下のようにします。
-\begin{enumerate}
-\item \vbindex{lpq} を実行すると、 現在印刷作業中の物件のジョブ番号 が表示される。
-\item \vbindex{lprm} [ID番号] を実行する
-\end{enumerate}
-
-プリンタを指定する時には、-P オプションを使って、
-\begin{screen}
-\begin{verbatim}
-$ lpq -Ppr2
-$ lprm -Ppr2 <ジョブ番号>
-\end{verbatim}
-\end{screen}
-とします。
-ここの例では、pr2 がプリンタ名である。
-\verb|lpq| というコマンドは印刷作業状況を知るにも便利です。
-
-\verb|lprm|を使うかわりに
-CUPS(\ref{sec:cups}節)にアクセスして「ジョブの停止」をクリックして印刷
-を止めることもでます。
-
-\verb|lprm|やCUPSで印刷中止が間にあわなかったときには、プリンターに走って
-以下を実行してください。
-\begin{enumerate}
-\item 紙をひっこぬく
-\item プリンタの操作パネルで"オフライン"にする
-\item プリンタを"リセット"する
-\end{enumerate}
+% とします。mpage や lpr コマンドでも同様にしてプリンタを指定できる。
 
 
-\chapter{ソフトウェアのインストール方法(rpm/apt)}
+
+% \section{\TeX ファイルの印刷$^*$}
+
+% \TeX を印刷するには\vbindex{dvips}コマンドで\vbindex{dvi} ファイルに変換
+% してから\verb|lpr|コマンドを使って印刷します。
+% \begin{screen}
+% \begin{verbatim}
+% $ dvips -f <ファイル名.dvi> | lpr
+% \end{verbatim}
+% \end{screen}
+% \verb|-f|は出力を標準出力にするためのオプションです。
+% 上の例では出力をlprへパイプしています。
+
+% dvi ファイルの 2ページ目から3ページ目を印刷する時には次のようにします。
+% \begin{screen}
+% \begin{verbatim}
+% $ dvips -f -p 2 -l 3 &lt;ファイル名.dvi> | lpr
+% \end{verbatim}
+% \end{screen}
+
+% つまり、\verb|-p|は最初のページの指定、\verb|-l|は最後のページの指定
+% をするためのオプションです。
+
+% 以下のようにすれば、TeXファイルの２ページを紙１枚にまとめて印刷できま
+% す。
+% \begin{screen}
+% \begin{verbatim}
+% $ dvips -f <ファイル名.dvi> | mpage -P -2
+% \end{verbatim}
+% \end{screen}
+
+% \section{プリントアウトの中止}
+
+% 「あ、しまった、これは印刷するつもりじゃなかった！！！」という時には
+% 以下のようにします。
+% \begin{enumerate}
+% \item \vbindex{lpq} を実行すると、 現在印刷作業中の物件のジョブ番号 が表示される。
+% \item \vbindex{lprm} [ID番号] を実行する
+% \end{enumerate}
+
+% プリンタを指定する時には、-P オプションを使って、
+% \begin{screen}
+% \begin{verbatim}
+% $ lpq -Ppr2
+% $ lprm -Ppr2 <ジョブ番号>
+% \end{verbatim}
+% \end{screen}
+% とします。
+% ここの例では、pr2 がプリンタ名である。
+% \verb|lpq| というコマンドは印刷作業状況を知るにも便利です。
+
+% \verb|lprm|を使うかわりに
+% CUPS(\ref{sec:cups}節)にアクセスして「ジョブの停止」をクリックして印刷
+% を止めることもでます。
+
+% \verb|lprm|やCUPSで印刷中止が間にあわなかったときには、プリンターに走って
+% 以下を実行してください。
+% \begin{enumerate}
+% \item 紙をひっこぬく
+% \item プリンタの操作パネルで"オフライン"にする
+% \item プリンタを"リセット"する
+% \end{enumerate}
 
 
-\section{rpm パッケージのインストールをしたい(rpm コマンドの使いかた)}
+\chapter{ソフトウェアのインストール方法(apt/rpm)}
 
 
-Ubuntu系Linux (Ubuntu/Mint等)では，アプリケーションが \vbindex{deb} 形式と呼ばれる\nmindex{パッケージ}形式で配布されている。
+\section{パッケージ管理について}
+
+
+Ubuntu系Linux (Ubuntu/Mint等)では，アプリケーションを\vbindex{deb}形式と呼ばれる\nmindex{パッケージ}形式で配布している。
 パッケージ管理(ダウンロードやインストール，削除など)には\vbindex{apt}コマンドを使う。
+RedHat系Linux (CentOS/Fedora/Vine等)では，\vbindex{rpm}で配布されており，パッケージ管理にはCentOSやFedoraでは\vbindex{yum}を，Vine Linuxでは\vbindex{apt}を使う。
 
-RedHat系Linux (CentOS/Fedora/Vine等)では，
-deb形式ではなく \vbindex{rpm}で配布されており，
-パッケージ管理にはCentOSやFedoraでは\vbindex{yum}を，
-Vine Linuxでは\vbindex{apt}を使う。
+以下では，\verb|apt|や\verb|rpm|の利用方法を簡単に説明する。
 
-以下では，\verb|rpm|や\verb|apt|の利用方法は以下に簡単に説明する。
+**注意**) パッケージのインストールや削除等は管理者権限で行う必要がある。関連コマンドの実行時は`sudo`を利用すること。
 
-\verb|rpm|コマンドはダウンロードした個々の\verb|rpm|パッケージのインス
-トールや削除に、\vbindex{apt-get}コマンドはパッケージのダウンロードか
-らインストールまでをまとめて実行するのに使う。
+
+\section{apt を利用したパッケージのインストール・一斉更新\label{sec:apt}}
+
+\vbindex{apt} を利用すると、あるディレクトリやインターネット上の各サイ
+トにある rpm パッケージのダウンロードとインストール、アップグレードを
+簡単にできる。
+パッケージ依存性も同時にチェックして、必要なものは同時にインストールし
+てくれる。
+パッケージ入手先を追加・変更したいときは，必要に応じて\vbindex{/etc/apt/sources.list}に登録・修正する。
+\begin{enumerate}
+  \item まず必ず行うおまじない:
+  すでにインストールされているパッケージ情報と、\verb|sources.list| に登
+  録されているサイトにある最新パッケージ情報を入手する。
+  \index{apt-get}
+  \begin{screen}
+  \begin{verbatim}
+    # apt update
+  \end{verbatim}
+\end{screen}
+
+\item  特定のパッケージをインストールするとき
+\begin{screen}
+\begin{verbatim}
+  apt install package [package ...]
+\end{verbatim}
+\end{screen}
+
+これで、指定した package の入手・インストールが自動的にされる。
+
+\item  既にシステムにインストールされているパッケージを、最新版に更新したいとき
+\begin{screen}
+\begin{verbatim}
+  apt upgrade
+\end{verbatim}
+\end{screen}
+
+% 現在インストールされているパッケージを、最新版に自動更新します。
+% (もちろん最新版の捜索範囲は \verb|sources.list| に登録されているサイト
+% のみです。)
+このとき、同時に必要になる追加パッケージがあれば、いっしょにインストー
+ルしてくれる。
+ただし、更新によって、既にインストールされているパッケージが、
+同様の機能を持つ別のパッケージに置き換えられるものや、
+依存性の関係で削除されるパッケージものがある場合には、
+更新は行われない。
+
+\item 既にインストールされているパッケージを、パッケージの置き換えや削
+  除も含めて最新版に更新したいとき
+\begin{screen}
+\begin{verbatim}
+  apt dist-upgrade
+\end{verbatim}
+\end{screen}
+現在インストールされているパッケージを、最新のパッケージにする点は
+apt upgrade と同じだが、同じ機能をもつ別のパッケージへの差し
+替えや、依存性に問題の生じるパッケージの削除も行われる。
+便利だけど、パッケージの削除が行われるときには注意が必要。
+\end{enumerate}
+
+\subsection{パッケージの削除}
+
+\begin{screen}
+\begin{verbatim}
+  apt remove package [package ...]
+\end{verbatim}
+\end{screen}
+
+
+\subsection{パッケージの情報取得}
+
+\begin{enumerate}
+\item まず行うおまじない\index{apt-cache}
+  \begin{screen}
+  \begin{verbatim}
+    apt-cache gencaches
+  \end{verbatim}
+  \end{screen}
+  このコマンドで、パッケージの最新情報を取得できる。
+\item パッケージの情報取得
+  \begin{screen}
+  \begin{verbatim}
+    apt-cache show package [package ...]
+  \end{verbatim}
+  \end{screen}
+  このコマンドで、指定したパッケージのバージョン、機能、ライブラリやパッケージの依存関係等が表示される。もっと詳しい情報を知りたいときには以下を実行する。
+  \begin{screen}
+  \begin{verbatim}
+    apt-cache showpkg package [package ...]
+  \end{verbatim}
+  \end{screen}
+\end{enumerate}
+
+\subsection{パッケージとファイルの関係についての情報取得}
+\begin{enumerate}
+  \item 準備
+  \begin{screen}
+    \begin{verbatim}
+      apt install apt-file
+      apt-file update
+    \end{verbatim}
+  \end{screen}
+  \item 指定したファイルをインストールしたパッケージ名を表示する。
+  \begin{screen}
+    \begin{verbatim}
+      apt-file search <ファイル名>
+    \end{verbatim}
+  \end{screen}
+  \item 指定したパッケージに含まれるファイル一覧を表示する。
+  \begin{screen}
+    \begin{verbatim}
+      apt-file list <パッケージ名>
+    \end{verbatim}
+  \end{screen}  
+\end{enumerate}
 
 \section{rpm を利用したパッケージ管理}
 例えば，\verb|skype-0.93.0.3-fc2.i386.rpm|というパッケージを入手したとする。
@@ -1786,105 +1895,11 @@ less-382-0vl4
 \end{itemize}
 
 
-\section{apt を利用したパッケージのインストール・一斉更新\label{sec:apt}}
+% \section{いろいろなパッケージを入手したい}
 
-\vbindex{apt} を利用すると、あるディレクトリやインターネット上の各サイ
-トにある rpm パッケージのダウンロードとインストール、アップグレードを
-簡単にできる。
-パッケージ依存性も同時にチェックして、必要なものは同時にインストールし
-てくれる。
-パッケージ入手先を変更したいときは\vbindex{/etc/apt/sources.list}に登録する。
-\begin{enumerate}
-\item まず必ず行うおまじない:
-すでにインストールされているパッケージ情報と、\verb|sources.list| に登
-録されているサイトにある最新パッケージ情報を入手する。
-\index{apt-get}
-\begin{screen}
-\begin{verbatim}
-  # apt-get update
-\end{verbatim}
-\end{screen}
-
-\item  特定のパッケージをインストールするとき
-\begin{screen}
-\begin{verbatim}
-  apt-get install package [package ...]
-\end{verbatim}
-\end{screen}
-
-これで、指定した package の入手・インストールが自動的にされる。
-
-\item  既にシステムにインストールされているパッケージを、最新版に更新したいとき
-\begin{screen}
-\begin{verbatim}
-  apt-get upgrade
-\end{verbatim}
-\end{screen}
-
-% 現在インストールされているパッケージを、最新版に自動更新します。
-% (もちろん最新版の捜索範囲は \verb|sources.list| に登録されているサイト
-% のみです。)
-このとき、同時に必要になる追加パッケージがあれば、いっしょにインストー
-ルしてくれる。
-ただし、更新によって、既にインストールされているパッケージが、
-同様の機能を持つ別のパッケージに置き換えられるものや、
-依存性の関係で削除されるパッケージものがある場合には、
-更新は行われない。
-
-\item 既にインストールされているパッケージを、パッケージの置き換えや削
-  除も含めて最新版に更新したいとき
-\begin{screen}
-\begin{verbatim}
-  apt-get dist-upgrade
-\end{verbatim}
-\end{screen}
-現在インストールされているパッケージを、最新のパッケージにする点は
-apt-get upgrade と同じだが、同じ機能をもつ別のパッケージへの差し
-替えや、依存性に問題の生じるパッケージの削除も行われる。
-便利だけど、パッケージの削除が行われるときには注意が必要。
-\end{enumerate}
-
-\subsection{apt を利用したパッケージの削除}
-
-\begin{screen}
-\begin{verbatim}
-  apt-get remove package [package ...]
-\end{verbatim}
-\end{screen}
-
-
-\subsection{apt を利用したパッケージの情報取得}
-
-\begin{enumerate}
-\item まず行うおまじない\index{apt-cache}
-\begin{screen}
-\begin{verbatim}
-  apt-cache gencaches
-\end{verbatim}
-\end{screen}
-このコマンドで、パッケージの最新情報を取得できる。
-\item パッケージの情報取得
-\begin{screen}
-\begin{verbatim}
-  apt-cache show package [package ...]
-\end{verbatim}
-\end{screen}
-このコマンドで、指定したパッケージのバージョン、機能、
-ライブラリやパッケージへの依存情報等が表示される。
-もっと詳しい情報を知りたいときには以下を実行する。
-\begin{screen}
-\begin{verbatim}
-  apt-cache showpkg package [package ...]
-\end{verbatim}
-\end{screen}
-\end{enumerate}
-
-
-\section{いろいろなパッケージを入手したい}
-
-VinePlus (Vine Linux のオプショナルパッケージ集)のミラーサイトを見ると、
-いろいろなパッケージがあり、収録物は日々更新されている。
-apt-get を使えばこれらのパッケージを簡単にインストールできる。
+% VinePlus (Vine Linux のオプショナルパッケージ集)のミラーサイトを見ると、
+% いろいろなパッケージがあり、収録物は日々更新されている。
+% apt-get を使えばこれらのパッケージを簡単にインストールできる。
 
 
 % \chapter{いろいろなアプリケーション}
