@@ -1,7 +1,7 @@
 LATEXMK=latexmk
 .SUFFIXES: .md .pdf .tex .dvi
 
-HTMLDIR=${HOME}/mnt/zeus/jun/public_html/custom/download/texts/
+HTMLDIR=${HOME}/mnt/web/public_html/download/texts/
 
 paper.pdf: paper.md
 presen.pdf: presen.md
