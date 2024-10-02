@@ -151,7 +151,7 @@ arg: arg.o
 main.o: mycat.h main.c
 
 .c.o :
-        ${GCC} ${CFLAGS} -c -o $@ $<
+    ${GCC} ${CFLAGS} -c -o $@ $<
 
 clean:
     rm -f *~ *.o
